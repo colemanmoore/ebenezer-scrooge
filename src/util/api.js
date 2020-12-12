@@ -1,6 +1,8 @@
 import axios from 'axios'
+import moment from 'moment'
 
 const xhr = axios.create({
+    baseURL: 'http://localhost:8080/api',
     timeout: 30000
 })
 
@@ -8,7 +10,8 @@ export default {
     getAccount,
     addAccount,
     updateAccount,
-    listEntries,
+    listAllEntries,
+    listFutureEntries,
     addEntry,
     deleteEntry
 }
@@ -25,12 +28,16 @@ function addAccount(account) {
     return xhr.post('/account', account)
 }
 
-function listEntries({afterDate, userId }) {
+function listAllEntries({afterDate, userId }) {
     const params = { userId }
     if (afterDate) {
         params.after = afterDate.toJSON()
     }
     return xhr.get('/entries', { params: params })
+}
+
+function listFutureEntries({ userId }) {
+    return xhr.get('/entries', { params: { userId, after: moment().toDate() } })
 }
 
 function addEntry(entry) {

@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import LoadingMessage from './LoadingMessge'
 import Grid from './Grid/Grid'
 import GridRow from './Grid/GridRow'
 import GridHeader from './Grid/GridHeader'
+import api from '../util/api'
 
 function EntriesDisplay() {
 
@@ -14,14 +15,17 @@ function EntriesDisplay() {
         {key: 'balance', name: 'Balance'}
     ]
 
-    const data = [
-        { date: '3/17/2020', title: 'coronavirus', debt: '-300000' },
-        { date: '6/17/2020', title: 'birthda', income: '500' },
-        { date: '12/10/2020', title: 'today', debt: '-50' }
-    ]
-
     const [isBusy, setIsBusy] = useState(false)
     const [selectedIdx, setSelectedIdx] = useState(null)
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        api.listFutureEntries({ userId: 'asdf' }).then(resp => {
+            setData(resp.data)
+        }).catch(err => {
+            console.log(err)
+        })
+    }, [])
 
     const clickRow = rowIdx => setSelectedIdx(rowIdx)
 

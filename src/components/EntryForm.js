@@ -20,6 +20,8 @@ function EntryForm() {
         if (dateIn && title && moneyIn) {
             api.addEntry({ date, title, money, userId: 'useriddd' }).then(() => {
                 console.log('added entry')
+            }).catch(err => {
+                console.log(err)
             })
         }
     }
