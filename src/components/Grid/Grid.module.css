@@ -1,0 +1,26 @@
+.grid {
+    width: 75%;
+    border: 1px solid black;
+}
+
+.row {
+    display: flex;
+    justify-content: space-around;
+}
+
+.selectedRow {
+    background-color: #c6d4dd;
+}
+
+.cell {
+    flex: 1;
+    border-left: 1px solid #aaaaaa;
+    display: inline-block;
+    padding: 5px;
+    min-width: 100px;
+}
+
+.header {
+    font-weight: 600;
+    background-color: #f3f4ef;
+}

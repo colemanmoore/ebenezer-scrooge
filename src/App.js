@@ -1,25 +1,25 @@
-import logo from './logo.svg';
+import React from 'react'
+import CurrentBalance from './components/CurrentBalance'
+import EntryForm from './components/EntryForm'
+import EntriesDisplay from './components/EntriesDisplay'
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div style={Container}>
+        <CurrentBalance />
+        {/*<RefreshButton />*/}
+      </div>
+      <EntryForm />
+      <EntriesDisplay />
     </div>
   );
+}
+
+const Container = {
+    display: 'flex',
+    justifyContent: 'space-between'
 }
 
 export default App;
