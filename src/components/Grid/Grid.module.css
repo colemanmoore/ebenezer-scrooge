@@ -1,5 +1,6 @@
 .grid {
     width: 75%;
+    max-width: 1600px;
     border: 1px solid black;
 }
 

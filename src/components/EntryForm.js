@@ -1,43 +1,77 @@
 import React, { useState } from 'react'
-import EntryInput from "./EntryInput";
+import classNames from 'classnames'
+import api from '../util/api'
+import { validateDate, validateMoney, createDate } from '../util/util'
+import styles from './EntryForm.module.css'
 
 function EntryForm() {
 
     const [date, setDate] = useState(null)
-    const [title, setTitle] = useState('')
-    const [money, setMoney] = useState(0)
+    const [dateIsValid, setDateIsValid] = useState(true)
+    const [title, setTitle] = useState(null)
+    const [titleIsValid, setTitleIsValid] = useState(true)
+    const [money, setMoney] = useState(null)
+    const [moneyIsValid, setMoneyIsValid] = useState(true)
 
     const addButtonClick = () => {
-        console.log('click')
+        console.log('click', date, money, title)
+        const moneyIn = parseInt(money)
+        const dateIn = createDate(date)
+        if (dateIn && title && moneyIn) {
+            api.addEntry({ date, title, money, userId: 'useriddd' }).then(() => {
+                console.log('added entry')
+            })
+        }
     }
 
+    const handleDate = e => {
+        setDate(e.target.value)
+        setDateIsValid(validateDate(e.target.value))
+    }
+    const handleTitle = e => {
+        setTitle(e.target.value)
+        setTitleIsValid((!!title && title.length))
+    }
+
+    const handleMoney = e => {
+        setMoney(e.target.value)
+        setMoneyIsValid(validateMoney(money))
+    }
+
+    const onDateBlur = e => setDateIsValid(validateDate(e.target.value))
+    const onTitleBlur = () => setTitleIsValid((!!title && title.length))
+    const onMoneyBlur = () => setMoneyIsValid(validateMoney(money))
+
     return (
-        <div>
-            <EntryInput
+        <div className={styles.container}>
+            <input
+                className={classNames(styles.entryInput, {[styles.entryInputInvalid]: !dateIsValid})}
                 name="date"
                 value={date}
                 placeholder="Date"
-                // isValid={dateIsValid}
-                // onBlur={this.onDateBlur}
-                updateValue={setDate}
+                size={11}
+                onBlur={onDateBlur}
+                onChange={handleDate}
             />
-            <EntryInput
+            <input
+                className={classNames(styles.entryInput, {[styles.entryInputInvalid]: !titleIsValid})}
                 name="title"
                 value={title}
                 placeholder="Title"
-                // isValid={titleIsValid}
-                // onBlur={this.onTitleBlur}
-                updateValue={setTitle}
+                size={20}
+                onBlur={onTitleBlur}
+                onChange={handleTitle}
             />
-            <EntryInput
+            <input
+                className={classNames(styles.entryInput, {[styles.entryInputInvalid]: !moneyIsValid})}
                 name="money"
                 value={money}
-                placeholder="Income or Debt"
-                // isValid={moneyIsValid}
-                // onBlur={this.onMoneyBlur}
-                updateValue={setMoney}
+                placeholder="Income/Debt"
+                size={9}
+                onBlur={onMoneyBlur}
+                onChange={handleMoney}
             />
-            <button label="Add" onClick={addButtonClick} />
+            <div className={styles.addButton} onClick={addButtonClick}>+</div>
         </div>
     )
 }

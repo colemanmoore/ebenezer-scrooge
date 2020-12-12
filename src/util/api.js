@@ -1,13 +1,5 @@
 import axios from 'axios'
 
-axios.interceptors.request.use(config => {
-    return Promise.resolve()
-})
-
-axios.interceptors.response.use(config => {
-    return Promise.resolve()
-})
-
 const xhr = axios.create({
     timeout: 30000
 })
