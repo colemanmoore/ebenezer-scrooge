@@ -6,7 +6,7 @@ function GridHeader({ columns = [] }) {
     return (
         <div className={classNames(style.row, style.header)}>
             {columns.map((col, idx) => {
-                return <div className={style.row}>{col.name}</div>
+                return <div key={idx} className={style.row}>{col.name}</div>
             })}
         </div>
     )

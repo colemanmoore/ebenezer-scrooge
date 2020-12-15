@@ -3,9 +3,43 @@ import LoadingMessage from './LoadingMessge'
 import Grid from './Grid/Grid'
 import GridRow from './Grid/GridRow'
 import GridHeader from './Grid/GridHeader'
-import api from '../util/api'
+import { compareDates, renderDate } from '../util/util'
 
-function EntriesDisplay() {
+function EntriesDisplay({ balance, entries }) {
+
+    const [isBusy, setIsBusy] = useState(false)
+    const [selectedIdx, setSelectedIdx] = useState(null)
+    const [rows, setRows] = useState([])
+
+    const massage = data => {
+        const massaged = data.map(entry => ({
+            id: entry.id,
+            title: entry.title,
+            date: renderDate(entry.date),
+            money: entry.money,
+            income: entry.money >= 0 ? entry.money : '',
+            debt: entry.money < 0 ? entry.money : ''
+        })).sort((a, b) => compareDates(a.date, b.date))
+
+        let rollingBalance = balance
+        const result = []
+        massaged.forEach(entry => {
+            rollingBalance += entry.money
+            result.push({
+                ...entry,
+                balance: rollingBalance
+            })
+        })
+        return result
+    }
+
+    useEffect(() => {
+        if (entries) {
+            setRows(massage(entries))
+        }
+    }, [entries])
+
+    const clickRow = rowIdx => setSelectedIdx(rowIdx)
 
     const columns = [
         {key: 'date', name: 'Date'},
@@ -15,26 +49,12 @@ function EntriesDisplay() {
         {key: 'balance', name: 'Balance'}
     ]
 
-    const [isBusy, setIsBusy] = useState(false)
-    const [selectedIdx, setSelectedIdx] = useState(null)
-    const [data, setData] = useState([])
-
-    useEffect(() => {
-        api.listFutureEntries({ userId: 'asdf' }).then(resp => {
-            setData(resp.data)
-        }).catch(err => {
-            console.log(err)
-        })
-    }, [])
-
-    const clickRow = rowIdx => setSelectedIdx(rowIdx)
-
     return (
         <div style={Container}>
             {isBusy ? <LoadingMessage/> :
                 <Grid>
                     <GridHeader columns={columns} />
-                    {data.map((row, idx) => {
+                    {rows.map((row, idx) => {
                         return <GridRow
                             key={idx}
                             keys={columns.map(col => col.key)}

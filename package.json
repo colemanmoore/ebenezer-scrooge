@@ -21,14 +21,22 @@
     "morgan": "^1.10.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-hook-form": "^6.13.0",
     "react-scripts": "4.0.1",
     "rimraf": "^3.0.2",
     "web-vitals": "^0.2.4"
   },
   "nodemonConfig": {
     "exec": "npm run server:dev",
-    "watch": ["server/*", "public/*"],
-    "ignore": ["**/__tests__/**", "*.test.js", "*.spec.js"]
+    "watch": [
+      "server/*",
+      "public/*"
+    ],
+    "ignore": [
+      "**/__tests__/**",
+      "*.test.js",
+      "*.spec.js"
+    ]
   },
   "scripts": {
     "start": "react-scripts start",

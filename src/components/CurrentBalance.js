@@ -1,46 +1,39 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import { useForm } from 'react-hook-form'
 import api from '../util/api'
 
-function CurrentBalance() {
+function CurrentBalance({ balance, setBalance }) {
 
-    const [balanceInput, setBalanceInput] = useState(null)
-    const [balance, setBalance] = useState(null)
+    const { register, handleSubmit, setValue, reset } = useForm({
+        defaultValues: { balance }
+    })
 
     useEffect(() => {
-        api.getAccount({ userId: '' }).then(resp => {
-            setBalance(resp.data.account.balance)
-            setBalanceInput(resp.data.account.balance)
-        }).catch(err => {
-            console.log(err)
-        })
-    }, [])
+        setValue('balance', balance)
+    }, [balance])
 
-    const onInputChange = e => {
-        setBalanceInput(e.target.value)
-    }
-
-    const onInputBlur = () => {
-        let b
-        try {
-            b = parseInt(balanceInput)
-            // api.updateAccount({ balance: b })
-            setBalance(balanceInput)
-        } catch (err) {
-            setBalanceInput(balance)
+    const onSubmit = data => {
+        const val = +data.balance
+        if (isNaN(val)) {
+            reset()
+        } else {
+            setBalance({ balance: val })
+            // api.updateAccount({ balance: val })
         }
     }
 
     return (
         <div style={Container}>
             <h2 style={Label}>balance?</h2>
-            <input
-                size={12}
-                style={Input}
-                value={balanceInput}
-                type="text"
-                onChange={onInputChange}
-                onBlur={onInputBlur}
-            />
+            <form style={{display:'inline'}} onSubmit={handleSubmit(onSubmit)}>
+                <input
+                    name="balance"
+                    ref={register()}
+                    size={12}
+                    style={Input}
+                    type="text"
+                />
+            </form>
         </div>
     )
 }

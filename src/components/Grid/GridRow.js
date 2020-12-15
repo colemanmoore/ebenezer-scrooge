@@ -2,7 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 import style from './Grid.module.css'
 
-function GridRow({ key, keys, data, selected, onClick }) {
+function GridRow({ keys, data, selected, onClick }) {
 
     const deleteRow = () => {
         console.log('delete')

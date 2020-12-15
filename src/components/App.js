@@ -1,36 +1,48 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import TopHeader from './TopHeader'
 import CurrentBalance from './CurrentBalance'
 import EntryForm from './EntryForm'
 import EntriesDisplay from './EntriesDisplay'
 import api from '../util/api'
 
+const USER_ID = ''
+
 function App() {
 
-    const refreshData = () => {
-        api.listFutureEntries({ userId: '' }).then(resp => {
+    const [balance, setBalance] = useState(null)
+    const [entries, setEntries] = useState([])
 
+    useEffect(() => {
+        api.getAccount({ userId: USER_ID }).then(resp => {
+            setBalance(resp.data.account.balance)
+        }).catch(err => {
+            console.log(err)
         })
+    }, [])
+
+    useEffect(() => {
+        refreshEntries().then(resp => {
+            console.log(resp.data)
+            setEntries(resp.data)
+        }).catch(err => {
+            console.log(err)
+        })
+    }, [balance])
+
+    function refreshEntries() {
+        return api.listFutureEntries({ userId: USER_ID })
     }
 
     return (
         <div>
-            <div style={Header}>MONEY</div>
+            <TopHeader />
             <div style={{display:'flex', justifyContent: 'center'}}>
-                <CurrentBalance />
+                <CurrentBalance balance={balance} setBalance={setBalance} />
                 <EntryForm />
             </div>
-            <EntriesDisplay />
+            <EntriesDisplay balance={balance} entries={entries} />
         </div>
-    );
+    )
 }
 
-const Header = {
-    textAlign: 'center',
-    fontSize: '34px',
-    fontFamily: 'Times, serif',
-    letterSpacing: '5px',
-    marginTop: '2.2em',
-    marginBottom: '1.6em'
-}
-
-export default App;
+export default App
