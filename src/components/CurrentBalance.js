@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import api from '../util/api'
 
 function CurrentBalance({ balance, setBalance }) {
 
@@ -18,7 +17,6 @@ function CurrentBalance({ balance, setBalance }) {
             reset()
         } else {
             setBalance({ balance: val })
-            // api.updateAccount({ balance: val })
         }
     }
 

@@ -26,7 +26,8 @@ function getAccount({ userId }) {
 }
 
 function updateAccount(account) {
-    return xhr.put('/account', account)
+    // return xhr.put('/account', account)
+    return Promise.resolve()
 }
 
 function addAccount(account) {
@@ -52,7 +53,8 @@ function listFutureEntries({ userId }) {
 }
 
 function addEntry(entry) {
-    return xhr.post('/entries', entry)
+    // return xhr.post('/entries', entry)
+    return Promise.resolve()
 }
 
 function updateEntry(entry) {

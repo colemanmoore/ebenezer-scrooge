@@ -22,8 +22,9 @@ function App() {
 
     useEffect(() => {
         refreshEntries().then(resp => {
-            console.log(resp.data)
             setEntries(resp.data)
+        }).then(() => {
+            return api.updateAccount({ balance: balance })
         }).catch(err => {
             console.log(err)
         })
@@ -33,12 +34,23 @@ function App() {
         return api.listFutureEntries({ userId: USER_ID })
     }
 
+    const addEntry = entry => {
+        api.addEntry({
+            ...entry,
+            userId: USER_ID
+        }).catch(err => {
+            console.log(err)
+        }).finally(() => {
+            return refreshEntries()
+        })
+    }
+
     return (
         <div>
             <TopHeader />
             <div style={{display:'flex', justifyContent: 'center'}}>
                 <CurrentBalance balance={balance} setBalance={setBalance} />
-                <EntryForm />
+                <EntryForm addEntry={addEntry} />
             </div>
             <EntriesDisplay balance={balance} entries={entries} />
         </div>

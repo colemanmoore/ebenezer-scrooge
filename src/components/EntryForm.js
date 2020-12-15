@@ -1,11 +1,10 @@
 import React from 'react'
 import classNames from 'classnames'
 import { useForm } from 'react-hook-form'
-import api from '../util/api'
 import { validateDate, validateMoney, createDate } from '../util/util'
 import styles from './EntryForm.module.css'
 
-function EntryForm() {
+function EntryForm({ addEntry }) {
 
     const { register, handleSubmit, errors, reset } = useForm({
         mode: 'onBlur',
@@ -18,13 +17,8 @@ function EntryForm() {
         const money = parseInt(data.money)
 
         if (date && title && money) {
-            api.addEntry({ date, title, money, userId: 'useriddd' }).then(() => {
-                console.log('added entry')
-            }).catch(err => {
-                console.log(err)
-            }).finally(() => {
-                reset()
-            })
+            addEntry({ date, title, money })
+            reset()
         }
     }
 
