@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
-function CurrentBalance({ balance, setBalance }) {
+function CurrentBalance({ balance, updateBalance }) {
 
     const { register, handleSubmit, setValue, reset } = useForm({
         defaultValues: { balance }
@@ -16,7 +16,7 @@ function CurrentBalance({ balance, setBalance }) {
         if (isNaN(val)) {
             reset()
         } else {
-            setBalance(val)
+            updateBalance(val)
         }
     }
 

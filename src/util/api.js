@@ -17,17 +17,11 @@ export default {
 }
 
 function getAccount({ userId }) {
-    // return xhr.get('/account', { params: { userId }})
-    return Promise.resolve({
-        data: {
-            account: { userId: 'asdf', balance: 155 }
-        }
-    })
+    return xhr.get('/account', { params: { user_id: userId }})
 }
 
-function updateAccount(account) {
-    // return xhr.put('/account', account)
-    return Promise.resolve()
+function updateAccount({ userId, balance }) {
+    return xhr.put('/account', { user_id: userId, balance })
 }
 
 function addAccount(account) {
@@ -43,22 +37,16 @@ function listAllEntries({afterDate, userId }) {
 }
 
 function listFutureEntries({ userId }) {
-    // return xhr.get('/entries', { params: { userId, after: moment().toDate() } })
-    return Promise.resolve({
-        data: [
-            { id: '0', date: '12/10/2021', title: 'today', money: -240 },
-            { id: '1', date: '6/17/2021', title: 'birthday', money: 520 }
-        ]
+    return xhr.get('/entries', {
+        params: {
+            user_id: userId,
+            after: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+        }
     })
 }
 
-function addEntry(entry) {
-    // return xhr.post('/entries', entry)
-    return Promise.resolve()
-}
-
-function updateEntry(entry) {
-    return xhr.put(`/entries/${entry.id}`, entry)
+function addEntry({ userId, date, title, money}) {
+    return xhr.post('/entries', { user_id: userId, date, title, money })
 }
 
 function deleteEntry(id) {

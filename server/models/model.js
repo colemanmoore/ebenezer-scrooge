@@ -9,7 +9,7 @@ class Model {
         this.pool.on('error', (err, client) => `Error, ${err}, on idle client${client} `)
     }
 
-    async select(queryObj) {
+    async select(queryObj, special) {
         const params = {}
         this.columns.forEach(col => {
             if (queryObj[col]) params[col] = queryObj[col]
@@ -24,8 +24,10 @@ class Model {
                 const str = this.shape[key] === String || this.shape[key] === Date
                 query += `${key} = ${str?`'`:``}${params[key]}${str?`'`:``}` + suffix
             })
+            query += special ? ` AND ${special}` : '' + ';'
+        } else {
+            query += special ? ` WHERE ${special}` : '' + ';'
         }
-        query += ';'
         console.log(query)
         return this.pool.query(query)
     }
@@ -72,13 +74,9 @@ class Model {
         let list = ''
         this.columns.forEach((col, idx) => {
             const suffix = idx < this.columns.length-1 ? ', ' : ''
-            if (!queryObj[col]) {
-                list += 'NULL' + suffix
-            } else {
-                const value = queryObj[col] || 'NULL'
-                const str = this.shape[col] === String || this.shape[col] === Date
-                list += (str?`'`:``) + value + (str?`'`:``) + suffix
-            }
+            const value = queryObj[col] || 'NULL'
+            const str = this.shape[col] === String || this.shape[col] === Date
+            list += (str?`'`:``) + value + (str?`'`:``) + suffix
         })
         return list
     }

@@ -41,6 +41,8 @@ function EntriesDisplay({ balance, entries }) {
 
     const clickRow = rowIdx => setSelectedIdx(rowIdx)
 
+    const doubleClickRow = rowId => { console.log(rowId) }
+
     const columns = [
         {key: 'date', name: 'Date'},
         {key: 'title', name: 'Title'},
@@ -60,6 +62,7 @@ function EntriesDisplay({ balance, entries }) {
                             keys={columns.map(col => col.key)}
                             selected={selectedIdx===idx}
                             onClick={clickRow.bind(null, idx)}
+                            onDoubleClick={doubleClickRow.bind(null, row.id)}
                             data={row}
                         />
                     })}
