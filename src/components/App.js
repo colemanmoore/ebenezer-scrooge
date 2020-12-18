@@ -9,6 +9,7 @@ const USER_ID = ''
 
 function App() {
 
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [balance, setBalance] = useState(null)
     const [entries, setEntries] = useState([])
 

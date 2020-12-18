@@ -16,7 +16,7 @@ function CurrentBalance({ balance, setBalance }) {
         if (isNaN(val)) {
             reset()
         } else {
-            setBalance({ balance: val })
+            setBalance(val)
         }
     }
 
