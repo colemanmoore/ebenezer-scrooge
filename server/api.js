@@ -8,67 +8,67 @@ export default () => {
     api.get('/', (req, res) => res.json({ message: 'Welcome to the api' }))
 
     api.get('/entries', (req, res) => {
-        EntryModel.select('*', ` WHERE user_id = '${req.query.userId}'`).then(resp => {
+        EntryModel.select(req.body).then(resp => {
             res.status(200).json({ entries: resp.rows })
         }).catch(err => {
-            console.log(err)
-            res.status(500).json({ err })
+            console.warn(err)
+            res.status(500).json({ error: err })
         })
     })
 
     api.post('/entries', (req, res) => {
+        if (!req.body.user_id) res.status(400).send('New entry missing user_id field')
+        if (!req.body.date) res.status(400).send('New entry missing date field')
+        if (!req.body.title) res.status(400).send('New entry missing title field')
+        if (!req.body.money) res.status(400).send('New entry missing money field')
+
         EntryModel.create(req.body).then(resp => {
-            return res.status(200).json(resp)
+            res.status(200).json(resp)
         }).catch(err => {
-            console.log(err)
-            return res.status(500).json({ err })
+            console.warn(err)
+            res.status(500).json({ error: err })
         })
     })
 
-    api.delete('/entries', (req, res) => {
-        EntryModel.remove()
+    api.delete('/entries/:id', (req, res) => {
+        EntryModel.remove(req.params.id).then(resp => {
+            res.status(200).json(resp)
+        }).catch(err => {
+            console.warn(err)
+            res.status(500).json({ error: err })
+        })
     })
 
     api.get('/account', (req, res) => {
-        console.log('GET /account')
-        AccountModel.select('*', ` WHERE user_id=${req.params.userId}`).then(resp => {
-            console.log('*** ', resp)
+        AccountModel.select(req.body).then(resp => {
+            res.status(200).json(resp)
+        }).catch(err => {
+            console.warn(err)
+            res.status(500).json({ error: err })
         })
     });
 
     api.post('/account', (req, res) => {
-        // if (!req.body.userId) {
-        //     res.status(400).send('New account missing userId field');
-        // }
-        //
-        // if (!req.body.balance && req.body.balance !== 0) {
-        //     res.status(400).send('New account missing balance field');
-        // }
-        //
-        // const account = new Account(db)({
-        //     userId: req.body.userId,
-        //     balance: req.body.balance
-        // });
-        //
-        // account.save(err => {
-        //     if (err) return handleError(err);
-        //     res.json({ account: account });
-        // });
+        if (!req.body.user_id) res.status(400).send('New account missing user_id field')
+        if (!req.body.balance && req.body.balance !== 0) res.status(400).send('New account missing balance field')
+
+        AccountModel.create(req.body).then(resp => {
+            res.status(200).json(resp)
+        }).catch(err => {
+            console.warn(err)
+            res.status(500).json({ error: err })
+        })
     });
 
     api.put('/account', (req, res) => {
-        // Account(db).update({ userId: req.body.userId }, req.body, (err, raw) => {
-        //     if (err) return handleError(err);
-        //     res.json({ account: req.body });
-        // });
-    });
+        if (!req.body.user_id) res.status(400).send('Update account requiresuser_id field')
+        if (!req.body.balance && req.body.balance !== 0) res.status(400).send('Update account requires balance field')
 
-    return api;
+        AccountModel.update({ balance: req.body.balance },
+            `user_id = '${req.body.user_id}'`).then(resp => {
+                res.status(200).json(resp)
+            })
+    })
 
-    function handleError(err) {
-        console.log('Error:');
-        console.log(err);
-        res.status(500).send({ error: err });
-        return err;
-    }
+    return api
 }

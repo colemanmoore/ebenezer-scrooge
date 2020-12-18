@@ -4,6 +4,7 @@ import CurrentBalance from './CurrentBalance'
 import EntryForm from './EntryForm'
 import EntriesDisplay from './EntriesDisplay'
 import api from '../util/api'
+import { initializeFirebase } from '../util/oauth'
 
 const USER_ID = ''
 
@@ -14,12 +15,16 @@ function App() {
     const [entries, setEntries] = useState([])
 
     useEffect(() => {
+        initializeFirebase()
+    }, [])
+
+    useEffect(() => {
         api.getAccount({ userId: USER_ID }).then(resp => {
             setBalance(resp.data.account.balance)
         }).catch(err => {
             console.log(err)
         })
-    }, [])
+    }, [isLoggedIn])
 
     useEffect(() => {
         refreshEntries().then(resp => {
