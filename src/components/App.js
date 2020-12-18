@@ -44,15 +44,22 @@ function App() {
     }, [balance])
 
     const addEntry = entry => {
-        api.addEntry({
-            ...entry,
-            userId: USER_ID
+        api.addEntry({...entry, userId: USER_ID}).then(() => {
+            return api.listFutureEntries({ userId: USER_ID })
+        }).then(resp => {
+            setEntries(resp.data.entries)
         }).catch(err => {
             console.log(err)
-        }).finally(() => {
-            return api.listFutureEntries({ userId: USER_ID }).then(resp => {
-                setEntries(resp.data.entries)
-            })
+        })
+    }
+
+    const deleteEntry = entryId => {
+        api.deleteEntry(entryId).then(() => {
+            return api.listFutureEntries({ userId: USER_ID })
+        }).then(resp => {
+            setEntries(resp.data.entries)
+        }).catch(err => {
+            console.log(err)
         })
     }
 
@@ -63,7 +70,7 @@ function App() {
                 <CurrentBalance balance={balance} updateBalance={setBalance}/>
                 <EntryForm addEntry={addEntry} />
             </div>
-            <EntriesDisplay balance={balance} entries={entries} />
+            <EntriesDisplay balance={balance} entries={entries} deleteEntry={deleteEntry} />
         </div>
     )
 }

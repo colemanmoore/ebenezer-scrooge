@@ -21,11 +21,6 @@ div.selectedRow {
     min-width: 100px;
 }
 
-.header {
-    font-weight: 600;
-    background-color: #f3f4ef;
-}
-
 .debt {
     color: #760909;
 }

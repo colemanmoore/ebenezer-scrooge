@@ -3,8 +3,6 @@ import classNames from 'classnames'
 import style from './Grid.module.css'
 
 function GridRow({ keys, data, selected, onClick, onDoubleClick }) {
-    console.log(keys)
-
     return (
         <div className={classNames(style.row, {[style.selectedRow]: selected})}
              onClick={onClick} onDoubleClick={onDoubleClick}

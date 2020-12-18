@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Grid from './Grid/Grid'
 import GridRow from './Grid/GridRow'
-import GridHeader from './Grid/GridHeader'
 import { compareDates, renderDate } from '../util/util'
 
-function EntriesDisplay({ balance, entries }) {
+function EntriesDisplay({ balance, entries, deleteEntry }) {
 
     const [selectedIdx, setSelectedIdx] = useState(null)
     const [rows, setRows] = useState([])
@@ -43,7 +42,9 @@ function EntriesDisplay({ balance, entries }) {
 
     const clickRow = rowIdx => setSelectedIdx(rowIdx)
 
-    const doubleClickRow = rowId => { console.log(rowId) }
+    const doubleClickRow = rowId => {
+        deleteEntry(rowId)
+    }
 
     const columns = [
         {key: 'date', name: 'Date'},
