@@ -1,54 +1,59 @@
 import axios from 'axios'
 import moment from 'moment'
+import auth from './auth'
 
-const xhr = axios.create({
-    baseURL: 'http://localhost:8080/api',
-    timeout: 30000
-})
-
-export default {
-    getAccount,
-    addAccount,
-    updateAccount,
-    listAllEntries,
-    listFutureEntries,
-    addEntry,
-    deleteEntry
-}
-
-function getAccount({ userId }) {
-    return xhr.get('/account', { params: { user_id: userId }})
-}
-
-function updateAccount({ userId, balance }) {
-    return xhr.put('/account', { user_id: userId, balance })
-}
-
-function addAccount(account) {
-    return xhr.post('/account', account)
-}
-
-function listAllEntries({afterDate, userId }) {
-    const params = { userId }
-    if (afterDate) {
-        params.after = afterDate.toJSON()
+class Api {
+    constructor() {
+        this.TIMEOUT = 30000
+        this.xhr = null
+        this.token = null
     }
-    return xhr.get('/entries', { params: params })
-}
 
-function listFutureEntries({ userId }) {
-    return xhr.get('/entries', {
-        params: {
-            user_id: userId,
-            after: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    authorize() {
+        console.log('authorize--', auth.getToken())
+        this.xhr = axios.create({
+            baseURL: process.env.API_URL,
+            timeout: this.TIMEOUT,
+            headers: { authorization: `Bearer ${auth.getToken()}`}
+        })
+    }
+
+    getAccount({ userId }) {
+        return this.xhr.get('/account', { params: { user_id: userId }})
+    }
+
+    addAccount(account) {
+        return this.xhr.post('/account', account)
+    }
+
+    updateAccount({ userId, balance }) {
+        return this.xhr.put('/account', { user_id: userId, balance })
+    }
+
+    listAllEntries({afterDate, userId }) {
+        const params = { userId }
+        if (afterDate) {
+            params.after = afterDate.toJSON()
         }
-    })
+        return this.xhr.get('/entries', { params: params })
+    }
+
+    listFutureEntries({ userId }) {
+        return this.xhr.get('/entries', {
+            params: {
+                user_id: userId,
+                after: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+            }
+        })
+    }
+
+    addEntry({ userId, date, title, money}) {
+        return this.xhr.post('/entries', { user_id: userId, date, title, money })
+    }
+
+    deleteEntry(id) {
+        return this.xhr.delete(`/entries/${id}`)
+    }
 }
 
-function addEntry({ userId, date, title, money}) {
-    return xhr.post('/entries', { user_id: userId, date, title, money })
-}
-
-function deleteEntry(id) {
-    return xhr.delete(`/entries/${id}`)
-}
+export default Api

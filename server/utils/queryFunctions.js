@@ -16,10 +16,6 @@ user_id VARCHAR(36) DEFAULT NULL,
 balance INT DEFAULT 0
 );`
 
-const dropEntriesTable = 'DROP TABLE entries'
-
-const dropAccountsTable = 'DROP TABLE accounts'
-
 const executeQueryArray = async arr => new Promise(resolve => {
     const stop = arr.length;
     arr.forEach(async (q, index) => {
@@ -28,5 +24,4 @@ const executeQueryArray = async arr => new Promise(resolve => {
     });
 });
 
-export const dropTables = () => executeQueryArray([ dropEntriesTable, dropAccountsTable ]);
-export const createTables = () => executeQueryArray([ createAccountsTable, createEntriesTable ]);
+export const initializeDatabase = () => executeQueryArray([ createAccountsTable, createEntriesTable ]);

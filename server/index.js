@@ -6,7 +6,7 @@ import path from 'path';
 import bodyParser from 'body-parser'
 import api from './api'
 import dotenv from 'dotenv'
-import { createTables } from './utils/queryFunctions'
+import { initializeDatabase } from './utils/queryFunctions'
 
 dotenv.config();
 
@@ -17,9 +17,7 @@ app.server = http.createServer(app);
 app.use(morgan('dev'));
 
 // 3rd party middleware
-app.use(cors({
-    exposedHeaders: ["Link"]
-}));
+app.use(cors());
 
 app.use(bodyParser.json({
     limit: '100kb'
@@ -41,7 +39,7 @@ app.get('/', (req, res) => {
 });
 
 // set up db
-createTables().then(() => {
+initializeDatabase().then(() => {
     console.log('~ database initialized ~')
 })
 
