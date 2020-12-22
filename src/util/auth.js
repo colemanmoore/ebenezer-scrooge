@@ -1,4 +1,7 @@
+import cookies from 'js-cookie'
 import { authentication, provider } from './firebase'
+
+const tokenKey = 'scrooge_token'
 
 class Auth {
     constructor() {
@@ -6,20 +9,30 @@ class Auth {
     }
 
     getToken() {
-        console.log('get token', this.token)
+        if (!this.token) {
+            this.token = cookies.get(tokenKey)
+        }
+        if (!this.token) {
+            authentication.currentUser.getIdToken(false)
+        }
         return this.token
+    }
+
+    setToken(token) {
+        this.token = token
+        cookies.set(tokenKey, token)
     }
 
     loginPopup() {
         return authentication.signInWithPopup(provider).then(result => {
             const { profile } = result.additionalUserInfo
-            this.token = result.credential.idToken;
+            this.setToken(result.credential.idToken)
             return {...profile}
         })
     }
 
     logout() {
-
+        cookies.remove(tokenKey)
     }
 }
 

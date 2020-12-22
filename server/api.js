@@ -7,70 +7,87 @@ export default () => {
 
     api.get('/', (req, res) => res.json({ message: 'Welcome to the api' }))
 
-    api.get('/entries', (req, res) => {
-        EntryModel.select(req.query, `date >= '${req.query.after}'`).then(resp => {
+    api.get('/entries', async (req, res) => {
+        try {
+            const resp = await EntryModel.select(req.query,`date >= '${req.query.after}'`)
             res.status(200).json({ entries: resp.rows })
-        }).catch(err => {
-            console.warn(err)
-            res.status(500).json({ error: err })
-        })
+        } catch (error) {
+            console.warn(error)
+            res.status(500).json({ error })
+        }
     })
 
-    api.post('/entries', (req, res) => {
+    api.post('/entries', async (req, res) => {
         if (!req.body.user_id) res.status(400).send('New entry missing user_id field')
         if (!req.body.date) res.status(400).send('New entry missing date field')
         if (!req.body.title) res.status(400).send('New entry missing title field')
         if (!req.body.money) res.status(400).send('New entry missing money field')
 
-        EntryModel.create(req.body).then(resp => {
+        try {
+            const resp = await EntryModel.create(req.body)
             res.status(200).json(resp)
-        }).catch(err => {
-            console.warn(err)
-            res.status(500).json({ error: err })
-        })
+        } catch (error) {
+            console.warn(error)
+            res.status(500).json({ error })
+        }
     })
 
     api.delete('/entries/:id', (req, res) => {
-        EntryModel.remove(req.params.id).then(resp => {
+        try {
+            const resp = EntryModel.remove(req.params.id)
             res.status(200).json(resp)
-        }).catch(err => {
-            console.warn(err)
-            res.status(500).json({ error: err })
-        })
+        } catch (error) {
+            console.warn(error)
+            res.status(500).json({ error })
+        }
     })
 
-    api.get('/account', (req, res) => {
-        AccountModel.select(req.body).then(resp => {
-            const { user_id, balance } = resp.rows[0]
-            res.status(200).json({
-                account: { userId: user_id, balance }
-            })
-        }).catch(err => {
-            console.warn(err)
-            res.status(500).json({ error: err })
-        })
+    api.get('/account/:user_id', async (req, res) => {
+        const { user_id } = req.params
+
+        try {
+            let resp = await AccountModel.select(req.body, `user_id = '${user_id}'`)
+            if (resp.rows.length) {
+                res.status(200).json({
+                    account: resp.rows[0]
+                })
+            } else {
+                await AccountModel.create({ user_id, balance: 0 })
+                resp = await AccountModel.select(req.body,`user_id = '${user_id}'`)
+                console.log('----', resp.rows)
+                res.status(200).json({
+                    account: resp.rows[0]
+                })
+            }
+        } catch (error) {
+            console.warn(error)
+            res.status(500).json({ error })
+        }
     })
 
-    api.post('/account', (req, res) => {
+    api.post('/account', async (req, res) => {
         if (!req.body.user_id) res.status(400).send('New account missing user_id field')
-        if (!req.body.balance && req.body.balance !== 0) res.status(400).send('New account missing balance field')
 
-        AccountModel.create(req.body).then(resp => {
+        try {
+            await AccountModel.create(req.body)
             res.status(200).json(req.body)
-        }).catch(err => {
-            console.warn(err)
-            res.status(500).json({ error: err })
-        })
+        } catch (error) {
+            console.warn(error)
+            res.status(500).json({ error })
+        }
     })
 
-    api.put('/account', (req, res) => {
-        if (!req.body.user_id) res.status(400).send('Update account requires user_id field')
+    api.put('/account/:user_id', async (req, res) => {
         if (!req.body.balance && req.body.balance !== 0) res.status(400).send('Update account requires balance field')
 
-        AccountModel.update({ balance: req.body.balance },
-            `user_id = '${req.body.user_id}'`).then(resp => {
-                res.status(200).json(resp)
-            })
+        try {
+            const resp = await AccountModel.update({ balance: req.body.balance },
+                `user_id = '${req.params.user_id}'`)
+            res.status(200).json(resp)
+        } catch (error) {
+            console.warn(error)
+            res.status(500).json({ error })
+        }
     })
 
     return api

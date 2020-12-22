@@ -5,37 +5,37 @@ import auth from './auth'
 class Api {
     constructor() {
         this.TIMEOUT = 30000
-        this.xhr = null
+        this.xhr = axios.create({
+            baseURL: process.env.REACT_APP_API_URL,
+            timeout: this.TIMEOUT
+        })
         this.token = null
     }
 
-    authorize() {
-        console.log('authorize--', auth.getToken())
-        this.xhr = axios.create({
-            baseURL: process.env.API_URL,
-            timeout: this.TIMEOUT,
+    getAccount({ userId }) {
+        return this.xhr.get(`/account/${userId}`, {
+            options: { headers: { authorization: `Bearer ${auth.getToken()}`}}
+        })
+    }
+
+    updateAccount({ userId, balance }) {
+        return this.xhr.put(`/account/${userId}`, {
+            user_id: userId,
+            balance
+        }, {
             headers: { authorization: `Bearer ${auth.getToken()}`}
         })
     }
 
-    getAccount({ userId }) {
-        return this.xhr.get('/account', { params: { user_id: userId }})
-    }
-
-    addAccount(account) {
-        return this.xhr.post('/account', account)
-    }
-
-    updateAccount({ userId, balance }) {
-        return this.xhr.put('/account', { user_id: userId, balance })
-    }
-
     listAllEntries({afterDate, userId }) {
-        const params = { userId }
+        const params = { user_id: userId }
         if (afterDate) {
-            params.after = afterDate.toJSON()
+            params.after = moment(afterDate).format('YYYY-MM-DD HH:mm:ss')
         }
-        return this.xhr.get('/entries', { params: params })
+        return this.xhr.get('/entries', {
+            params: params,
+            headers: { authorization: `Bearer ${auth.getToken()}`}
+        })
     }
 
     listFutureEntries({ userId }) {
@@ -43,16 +43,21 @@ class Api {
             params: {
                 user_id: userId,
                 after: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-            }
+            },
+            headers: { authorization: `Bearer ${auth.getToken()}`}
         })
     }
 
     addEntry({ userId, date, title, money}) {
-        return this.xhr.post('/entries', { user_id: userId, date, title, money })
+        return this.xhr.post('/entries', { user_id: userId, date, title, money }, {
+            headers: { authorization: `Bearer ${auth.getToken()}`}
+        })
     }
 
     deleteEntry(id) {
-        return this.xhr.delete(`/entries/${id}`)
+        return this.xhr.delete(`/entries/${id}`, {
+            headers: { authorization: `Bearer ${auth.getToken()}`}
+        })
     }
 }
 

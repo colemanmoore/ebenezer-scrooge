@@ -6,56 +6,56 @@ import Api from '../util/api'
 
 export default function UserDisplay({ userId }) {
 
-    const api = new Api({ userId })
-    api.authorize()
+    let api = new Api()
 
     const [balance, setBalance] = useState(null)
     const [entries, setEntries] = useState([])
-    const [account, setAccount] = useState({})
+    const [account, setAccount] = useState(null)
 
-    useEffect(() => {
-        api.getAccount({ userId }).then(resp => {
+    useEffect(async () => {
+        if (userId) {
+            const resp = await api.getAccount({ userId })
             setAccount(resp.data.account)
             setBalance(resp.data.account.balance)
-        }).catch(err => {
-            console.log(err)
-        })
-    }, [])
+        }
+    }, [userId])
 
-    useEffect(() => {
-        api.listFutureEntries({ userId }).then(resp => {
-            setEntries(resp.data.entries)
-        }).catch(err => {
-            console.log(err)
-        })
+    useEffect(async () => {
+        if (account) {
+            try {
+                const resp = await api.listFutureEntries({ userId })
+                setEntries(resp.data.entries)
+            } catch (err) {
+                console.log(err)
+            }
+        }
     }, [account])
 
-    useEffect(() => {
-        if (balance && balance !== 0) {
-            api.updateAccount({ ...account, balance }).then(() => {}).catch(err => {
-                console.log(err)
-            })
+    useEffect(async() => {
+        if (account && balance && balance !== 0) {
+            console.log(account)
+            await api.updateAccount({ userId, balance })
         }
     }, [balance])
 
-    const addEntry = entry => {
-        api.addEntry({...entry, userId}).then(() => {
-            return api.listFutureEntries({ userId })
-        }).then(resp => {
+    const addEntry = async entry => {
+        try {
+            await api.addEntry({...entry, userId})
+            const resp = await api.listFutureEntries({ userId })
             setEntries(resp.data.entries)
-        }).catch(err => {
-            console.log(err)
-        })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-    const deleteEntry = entryId => {
-        api.deleteEntry(entryId).then(() => {
-            return api.listFutureEntries({ userId })
-        }).then(resp => {
+    const deleteEntry = async entryId => {
+        try {
+            await api.deleteEntry(entryId)
+            const resp = await api.listFutureEntries({ userId })
             setEntries(resp.data.entries)
-        }).catch(err => {
-            console.log(err)
-        })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
