@@ -12,30 +12,35 @@ export default function UserDisplay({ userId }) {
     const [entries, setEntries] = useState([])
     const [account, setAccount] = useState(null)
 
-    useEffect(async () => {
-        if (userId) {
-            const resp = await api.getAccount({ userId })
-            setAccount(resp.data.account)
-            setBalance(resp.data.account.balance)
-        }
+    useEffect(() => {
+        (async function fn() {
+            if (userId) {
+                const resp = await api.getAccount({ userId })
+                setAccount(resp.data.account)
+                setBalance(resp.data.account.balance)
+            }
+        })()
     }, [userId])
 
-    useEffect(async () => {
-        if (account) {
-            try {
-                const resp = await api.listFutureEntries({ userId })
-                setEntries(resp.data.entries)
-            } catch (err) {
-                console.log(err)
+    useEffect(() => {
+        (async function fn() {
+            if (account) {
+                try {
+                    const resp = await api.listFutureEntries({ userId })
+                    setEntries(resp.data.entries)
+                } catch (err) {
+                    console.log(err)
+                }
             }
-        }
+        })()
     }, [account])
 
-    useEffect(async() => {
-        if (account && balance && balance !== 0) {
-            console.log(account)
-            await api.updateAccount({ userId, balance })
-        }
+    useEffect(() => {
+        (async() => {
+            if (account && balance && balance !== 0) {
+                await api.updateAccount({ userId, balance })
+            }
+        })()
     }, [balance])
 
     const addEntry = async entry => {
@@ -61,10 +66,17 @@ export default function UserDisplay({ userId }) {
     return (
         <div>
             <div style={{display:'flex', justifyContent: 'center'}}>
-                <CurrentBalance balance={balance} updateBalance={setBalance}/>
+                <CurrentBalance
+                    balance={balance}
+                    updateBalance={setBalance}
+                />
                 <EntryForm addEntry={addEntry} />
             </div>
-            <EntriesDisplay balance={balance} entries={entries} deleteEntry={deleteEntry} />
+            <EntriesDisplay
+                balance={balance}
+                entries={entries}
+                deleteEntry={deleteEntry}
+            />
         </div>
     )
 }

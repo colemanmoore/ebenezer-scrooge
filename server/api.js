@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { AccountModel } from './models/account'
-import { EntryModel } from './models/entry'
+import { AccountModel } from './datastore/account'
+import { EntryModel } from './datastore/entry'
 
 export default () => {
     let api = Router();

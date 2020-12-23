@@ -4,11 +4,9 @@ import cors from 'cors'
 import morgan from 'morgan'
 import path from 'path';
 import bodyParser from 'body-parser'
-import api from './api'
-import dotenv from 'dotenv'
-import { initializeDatabase } from './utils/queryFunctions'
 
-dotenv.config()
+import api from './api'
+import { initializeDatabase } from './datastore/index'
 
 let app = express()
 app.server = http.createServer(app)

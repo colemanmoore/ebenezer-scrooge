@@ -1,4 +1,4 @@
-import { pool } from './pool'
+import { pool } from './index'
 
 class Model {
     constructor(table, columns, shape) {

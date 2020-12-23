@@ -5,28 +5,35 @@ const tokenKey = 'scrooge_token'
 
 class Auth {
     constructor() {
-        this.token = null
+        this.user = null
     }
 
     getToken() {
-        if (!this.token) {
-            this.token = cookies.get(tokenKey)
+        if (!this.user) {
+            return
         }
-        if (!this.token) {
-            authentication.currentUser.getIdToken(false)
+
+        if (!this.user.token) {
+            this.user.token = cookies.get(tokenKey)
         }
-        return this.token
+        if (!this.user.token) {
+            this.user.token = authentication.currentUser.getIdToken(false)
+        }
+        return this.user.token
     }
 
     setToken(token) {
-        this.token = token
+        this.user.token = token
         cookies.set(tokenKey, token)
     }
 
     loginPopup() {
         return authentication.signInWithPopup(provider).then(result => {
             const { profile } = result.additionalUserInfo
-            this.setToken(result.credential.idToken)
+            this.user = {
+                userId: profile.id,
+                token: result.credential.idToken
+            }
             return {...profile}
         })
     }

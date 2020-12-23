@@ -7,6 +7,8 @@ function App() {
 
     const [userId, setUserId] = useState(null)
 
+    const token = auth.getToken()
+
     const login = () => {
         auth.loginPopup().then(res => {
             setUserId(res.id)

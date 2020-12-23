@@ -1,4 +1,8 @@
-import { pool } from '../models/pool';
+import { Pool } from 'pg'
+import dotenv from 'dotenv'
+dotenv.config()
+
+const connectionString = process.env.DATABASE_URL
 
 const createEntriesTable =
 `CREATE TABLE IF NOT EXISTS entries (
@@ -16,12 +20,22 @@ user_id VARCHAR(36) DEFAULT NULL,
 balance INT DEFAULT 0
 );`
 
-const executeQueryArray = async arr => new Promise(resolve => {
-    const stop = arr.length;
-    arr.forEach(async (q, index) => {
-        await pool.query(q);
-        if (index + 1 === stop) resolve();
-    });
-});
+const pool = new Pool({ connectionString })
 
-export const initializeDatabase = () => executeQueryArray([ createAccountsTable, createEntriesTable ]);
+const executeQueryArray = async arr => new Promise(resolve => {
+    const stop = arr.length
+    arr.forEach(async (q, index) => {
+        await pool.query(q)
+        if (index + 1 === stop) resolve()
+    })
+})
+
+const initializeDatabase = () => executeQueryArray([
+    createAccountsTable,
+    createEntriesTable
+])
+
+export {
+    pool,
+    initializeDatabase
+}

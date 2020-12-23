@@ -51,7 +51,7 @@
     "server:clean": "rimraf dist-server",
     "server:build": "npm-run-all server:clean server:transpile",
     "server:serve": "PORT=8080 node ./dist-server/bin/www",
-    "server:dev": "NODE_ENV=development npm-run-all server:build server:serve",
+    "server:dev": "NODE_ENV=development npm-run-all server:build server:serve -- --require dotenv/config",
     "server:watch": "nodemon",
     "webapp:build": "build",
     "all": "build && server:build && server:serve"
