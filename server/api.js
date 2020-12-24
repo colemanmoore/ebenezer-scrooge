@@ -1,13 +1,14 @@
 import { Router } from 'express'
 import { AccountModel } from './datastore/account'
 import { EntryModel } from './datastore/entry'
+import { checkIfAuthenticated } from './auth-middleware'
 
 export default () => {
-    let api = Router();
+    let api = Router()
 
-    api.get('/', (req, res) => res.json({ message: 'Welcome to the api' }))
+    api.get('/', checkIfAuthenticated, (req, res) => res.json({ message: 'Welcome to the api' }))
 
-    api.get('/entries', async (req, res) => {
+    api.get('/entries', checkIfAuthenticated, async (req, res) => {
         try {
             const resp = await EntryModel.select(req.query,`date >= '${req.query.after}'`)
             res.status(200).json({ entries: resp.rows })
@@ -17,7 +18,7 @@ export default () => {
         }
     })
 
-    api.post('/entries', async (req, res) => {
+    api.post('/entries', checkIfAuthenticated, async (req, res) => {
         if (!req.body.user_id) res.status(400).send('New entry missing user_id field')
         if (!req.body.date) res.status(400).send('New entry missing date field')
         if (!req.body.title) res.status(400).send('New entry missing title field')
@@ -32,7 +33,7 @@ export default () => {
         }
     })
 
-    api.delete('/entries/:id', (req, res) => {
+    api.delete('/entries/:id', checkIfAuthenticated, (req, res) => {
         try {
             const resp = EntryModel.remove(req.params.id)
             res.status(200).json(resp)
@@ -42,7 +43,7 @@ export default () => {
         }
     })
 
-    api.get('/account/:user_id', async (req, res) => {
+    api.get('/account/:user_id', checkIfAuthenticated, async (req, res) => {
         const { user_id } = req.params
 
         try {
@@ -65,7 +66,7 @@ export default () => {
         }
     })
 
-    api.post('/account', async (req, res) => {
+    api.post('/account', checkIfAuthenticated, async (req, res) => {
         if (!req.body.user_id) res.status(400).send('New account missing user_id field')
 
         try {
@@ -77,7 +78,7 @@ export default () => {
         }
     })
 
-    api.put('/account/:user_id', async (req, res) => {
+    api.put('/account/:user_id', checkIfAuthenticated, async (req, res) => {
         if (!req.body.balance && req.body.balance !== 0) res.status(400).send('Update account requires balance field')
 
         try {

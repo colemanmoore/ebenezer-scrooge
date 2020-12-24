@@ -14,7 +14,8 @@ class Api {
 
     getAccount({ userId }) {
         return this.xhr.get(`/account/${userId}`, {
-            options: { headers: { authorization: `Bearer ${auth.getToken()}`}}
+            headers: { authorization: `Bearer ${auth.getToken()}`},
+            authToken: auth.getToken()
         })
     }
 

@@ -1,44 +1,49 @@
 import cookies from 'js-cookie'
-import { authentication, provider } from './firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+
+const config = {
+    apiKey: "AIzaSyCafxmJC1XIgE_txQifA6gC_hWpgVTv9T0",
+    authDomain: "finfuture-31e00.firebaseapp.com",
+    databaseURL: "https://finfuture-31e00.firebaseio.com",
+    projectId: "finfuture-31e00",
+    storageBucket: "finfuture-31e00.appspot.com",
+    messagingSenderId: "468294236972",
+    appId: "1:468294236972:web:04cde1f7a83e42e99d8a89"
+}
+
+const app = firebase.initializeApp(config)
+const authentication = app.auth()
+const provider = new firebase.auth.GoogleAuthProvider()
 
 const tokenKey = 'scrooge_token'
 
+// https://firebase.google.com/docs/auth/web/google-signin
+
 class Auth {
     constructor() {
-        this.user = null
+        this.token = null
     }
 
     getToken() {
-        if (!this.user) {
-            return
+        if (!this.token) {
+            this.token = cookies.get(tokenKey)
         }
-
-        if (!this.user.token) {
-            this.user.token = cookies.get(tokenKey)
+        if (!this.token) {
+            this.token = authentication.currentUser.getIdToken(false)
         }
-        if (!this.user.token) {
-            this.user.token = authentication.currentUser.getIdToken(false)
-        }
-        return this.user.token
+        console.log(this.token)
+        return this.token
     }
 
-    setToken(token) {
-        this.user.token = token
-        cookies.set(tokenKey, token)
+    async loginPopup() {
+        const result = await authentication.signInWithPopup(provider)
+        const { profile } = result.additionalUserInfo
+        return {...profile}
     }
 
-    loginPopup() {
-        return authentication.signInWithPopup(provider).then(result => {
-            const { profile } = result.additionalUserInfo
-            this.user = {
-                userId: profile.id,
-                token: result.credential.idToken
-            }
-            return {...profile}
-        })
-    }
-
-    logout() {
+    async logout() {
+        await authentication.signOut()
         cookies.remove(tokenKey)
     }
 }
