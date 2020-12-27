@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react'
 import Grid from './Grid/Grid'
 import GridRow from './Grid/GridRow'
 import { compareDates, renderDate } from '../util/util'
+import { useApi } from '../hooks/useApi'
 
-function EntriesDisplay({ balance, entries, deleteEntry }) {
+function EntriesDisplay() {
+
+    const api = useApi()
 
     const [selectedIdx, setSelectedIdx] = useState(null)
     const [rows, setRows] = useState([])
@@ -18,7 +21,7 @@ function EntriesDisplay({ balance, entries, deleteEntry }) {
             debt: entry.money < 0
         })).sort((a, b) => compareDates(a.date, b.date))
 
-        let rollingBalance = balance
+        let rollingBalance = api.account.balance
         const result = []
         massaged.forEach(entry => {
             rollingBalance += entry.money
@@ -31,19 +34,16 @@ function EntriesDisplay({ balance, entries, deleteEntry }) {
     }
 
     useEffect(() => {
-        if (entries) {
-            setRows(massage(entries))
+        if (api.account) {
+            setRows(massage(api.entries))
         }
-    }, [entries])
-
-    useEffect(() => {
-        setRows(massage(entries))
-    }, [balance])
+    }, [api.account, api.entries])
 
     const clickRow = rowIdx => setSelectedIdx(rowIdx)
 
-    const doubleClickRow = rowId => {
-        deleteEntry(rowId)
+    const doubleClickRow = async rowId => {
+        await api.deleteEntry(rowId)
+        await api.refreshEntries()
     }
 
     const columns = [
@@ -56,7 +56,6 @@ function EntriesDisplay({ balance, entries, deleteEntry }) {
     return (
         <div style={Container}>
             <Grid>
-                {/*<GridHeader columns={columns} />*/}
                 {rows.map((row, idx) => {
                     return <GridRow
                         key={idx}

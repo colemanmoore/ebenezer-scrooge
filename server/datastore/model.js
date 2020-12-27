@@ -28,14 +28,14 @@ class Model {
         } else {
             query += special ? ` WHERE ${special}` : '' + ';'
         }
-        console.log(query)
+        console.debug(query)
         return this.pool.query(query)
     }
 
     async create(queryObj) {
         let valuesList = this.values_from_query(queryObj)
         const query = `INSERT INTO ${this.table} (${this.list_columns()}) VALUES (${valuesList});`
-        console.log(query)
+        console.debug(query)
         return this.pool.query(query)
     }
 
@@ -52,13 +52,13 @@ class Model {
             query += ` WHERE ${condition}`
         }
         query += ';'
-        console.log(query)
+        console.debug(query)
         return this.pool.query(query)
     }
 
     async remove(id) {
         let query = `DELETE FROM ${this.table} WHERE id = ${id};`
-        console.log(query)
+        console.debug(query)
         return this.pool.query(query)
     }
 

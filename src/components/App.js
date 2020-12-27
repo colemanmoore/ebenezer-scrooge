@@ -1,25 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useAuth } from '../hooks/useAuth'
+import { ProvideApi } from '../hooks/useApi'
 import TopHeader from './TopHeader'
 import UserDisplay from './UserDisplay'
-import auth from '../util/auth'
 import LoginControl from './LoginControl'
 
 function App() {
 
-    const [userId, setUserId] = useState(null)
-
-    const login = async () => {
-        const res = await auth.loginPopup()
-        setUserId(res.id)
-    }
+    const auth = useAuth()
 
     return (
         <div>
             <TopHeader />
-            {
-                !userId ?
-                    <LoginControl doLogin={login} />
-                    : <UserDisplay userId={userId} />
+            {auth.authorized ?
+                <ProvideApi>
+                    <UserDisplay />
+                </ProvideApi>
+                : <LoginControl doLogin={auth.login} />
             }
         </div>
     )

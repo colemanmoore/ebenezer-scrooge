@@ -1,22 +1,29 @@
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useApi } from '../hooks/useApi'
 
-function CurrentBalance({ balance, updateBalance }) {
+function CurrentBalance() {
+
+    const api = useApi()
 
     const { register, handleSubmit, setValue, reset } = useForm({
-        defaultValues: { balance }
+        defaultValues: {
+            balance: api.account ? api.account.balance : null
+        }
     })
 
     useEffect(() => {
-        setValue('balance', balance)
-    }, [balance])
+        if (api.account) {
+            setValue('balance', api.account.balance)
+        }
+    }, [api.account])
 
     const onSubmit = data => {
         const val = +data.balance
         if (isNaN(val)) {
             reset()
         } else {
-            updateBalance(val)
+            api.updateAccount({ balance: val })
         }
     }
 

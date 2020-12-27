@@ -7,7 +7,7 @@ const TopHeader = () => (
         fontFamily: 'Times, serif',
         letterSpacing: '5px',
         marginTop: '2.2em',
-        marginBottom: '1.6em'
+        marginBottom: '1em'
     }}>
         MONEY
     </div>

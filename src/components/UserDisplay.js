@@ -1,82 +1,54 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect } from 'react'
 import CurrentBalance from './CurrentBalance'
 import EntryForm from './EntryForm'
 import EntriesDisplay from './EntriesDisplay'
-import Api from '../util/api'
+import AccountInfo from './AccountInfo'
+import { useApi } from '../hooks/useApi'
+import { useAuth } from '../hooks/useAuth'
 
-export default function UserDisplay({ userId }) {
+const UserDisplay = () => {
 
-    let api = new Api()
+    const api = useApi()
+    const auth = useAuth()
 
-    const [balance, setBalance] = useState(null)
-    const [entries, setEntries] = useState([])
-    const [account, setAccount] = useState(null)
-
-    useEffect(() => {
-        (async function fn() {
-            if (userId) {
-                const resp = await api.getAccount({ userId })
-                setAccount(resp.data.account)
-                setBalance(resp.data.account.balance)
-            }
-        })()
-    }, [userId])
+    const userId = auth.user.uid
 
     useEffect(() => {
-        (async function fn() {
-            if (account) {
-                try {
-                    const resp = await api.listFutureEntries({ userId })
-                    setEntries(resp.data.entries)
-                } catch (err) {
-                    console.log(err)
-                }
-            }
-        })()
-    }, [account])
-
-    useEffect(() => {
-        (async() => {
-            if (account && balance && balance !== 0) {
-                await api.updateAccount({ userId, balance })
-            }
-        })()
-    }, [balance])
-
-    const addEntry = async entry => {
         try {
-            await api.addEntry({...entry, userId})
-            const resp = await api.listFutureEntries({ userId })
-            setEntries(resp.data.entries)
+            api.getAccount({ userId })
         } catch (error) {
-            console.log(error)
+            console.log('error getting account:', error)
         }
-    }
+    }, [])
 
-    const deleteEntry = async entryId => {
-        try {
-            await api.deleteEntry(entryId)
-            const resp = await api.listFutureEntries({ userId })
-            setEntries(resp.data.entries)
-        } catch (error) {
-            console.log(error)
+    useEffect(() => {
+        if (api.account) {
+            try {
+                api.refreshEntries({ userId })
+            } catch (err) {
+                console.log(err)
+            }
         }
-    }
+    }, [api.account])
+    //
+    // useEffect(() => {
+    //     (async() => {
+    //         if (account && balance && balance !== 0) {
+    //             await api.updateAccount({ userId, balance })
+    //         }
+    //     })()
+    // }, [balance])
 
     return (
         <div>
-            <div style={{display:'flex', justifyContent: 'center'}}>
-                <CurrentBalance
-                    balance={balance}
-                    updateBalance={setBalance}
-                />
-                <EntryForm addEntry={addEntry} />
+            <AccountInfo user={auth.user} />
+            <div style={{display:'flex', justifyContent: 'center', marginTop: '40px'}}>
+                <CurrentBalance />
+                <EntryForm />
             </div>
-            <EntriesDisplay
-                balance={balance}
-                entries={entries}
-                deleteEntry={deleteEntry}
-            />
+            <EntriesDisplay />
         </div>
     )
 }
+
+export default UserDisplay
