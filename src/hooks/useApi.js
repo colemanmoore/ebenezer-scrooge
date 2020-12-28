@@ -19,9 +19,9 @@ function useProvideApi() {
     const [entries, setEntries] = useState([])
     const [account, setAccount] = useState(null)
 
-    const getAccount = async ({ userId }) => {
+    const getAccount = async () => {
         try {
-            const res = await xhr.get(`/account/${userId}`)
+            const res = await xhr.get(`/account`)
             setAccount({
                 balance: res.data.account.balance,
                 userId: res.data.account.user_id
@@ -32,7 +32,7 @@ function useProvideApi() {
     }
 
     const updateAccount = async ({ balance }) => {
-        const res = await xhr.put(`/account/${account.userId}`, { balance })
+        const res = await xhr.put(`/account`, { balance })
         setAccount(res.data)
     }
 
@@ -40,7 +40,6 @@ function useProvideApi() {
         try {
             const res = await xhr.get('/entries', {
                 params: {
-                    user_id: account.userId,
                     after: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
                 }
             })
@@ -52,18 +51,12 @@ function useProvideApi() {
 
     const addEntry = async ({ date, title, money}) => {
         try {
-            await xhr.post('/entries', {
-                user_id: account.userId,
-                date,
-                title,
-                money
-            })
+            await xhr.post('/entries', { date, title, money })
         } catch (error) {
             return Promise.reject('Error adding entry')
         }
 
-        const resp = await refreshEntries({ userId: account.userId })
-        setEntries(resp.data.entries)
+        await refreshEntries({ userId: account.userId })
     }
 
     const deleteEntry = entryId => {

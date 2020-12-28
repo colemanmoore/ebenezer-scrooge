@@ -31,8 +31,8 @@ export const checkSession = async (req, res, next) => {
         const decodedClaims = await admin
             .auth()
             .verifySessionCookie(sessionCookie, true)
-        console.log('decoded claims', decodedClaims)
-        // res.locals.decodedClaims = decodedClaims
+        res.locals.decodedClaims = decodedClaims
+        res.locals.user_id = decodedClaims.user_id
         next()
     } catch (error) {
         res.locals.sessionCookieInvalid = true

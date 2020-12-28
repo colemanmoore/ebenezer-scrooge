@@ -11,11 +11,9 @@ const UserDisplay = () => {
     const api = useApi()
     const auth = useAuth()
 
-    const userId = auth.user.uid
-
     useEffect(() => {
         try {
-            api.getAccount({ userId })
+            api.getAccount()
         } catch (error) {
             console.log('error getting account:', error)
         }
@@ -24,20 +22,12 @@ const UserDisplay = () => {
     useEffect(() => {
         if (api.account) {
             try {
-                api.refreshEntries({ userId })
+                api.refreshEntries()
             } catch (err) {
-                console.log(err)
+                console.log('error refreshing entries:', err)
             }
         }
     }, [api.account])
-    //
-    // useEffect(() => {
-    //     (async() => {
-    //         if (account && balance && balance !== 0) {
-    //             await api.updateAccount({ userId, balance })
-    //         }
-    //     })()
-    // }, [balance])
 
     return (
         <div>

@@ -40,8 +40,6 @@ function useProvideAuth() {
     const [user, setUser] = useState(false)
     const [authorized, setAuthorized] = useState(false)
 
-    let sessionLoginPromise
-
     const login = async () => {
         let resp, idToken, user
 
@@ -64,7 +62,6 @@ function useProvideAuth() {
             return false
         }
 
-        console.log('pre session login')
         try {
             await sessionLogin(idToken)
             setAuthorized(true)
@@ -74,8 +71,8 @@ function useProvideAuth() {
             return false
         }
 
-        console.log('session login done')
         user = { ...resp.user.providerData[0] }
+        console.log('session login done', user)
         setUser(user)
         return user
     }

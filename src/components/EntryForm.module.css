@@ -21,9 +21,12 @@
     color: #99cca6;
 }
 
-.entryInputInvalid {
+.entryInputInvalid::placeholder {
     color: #d92323;
-    border-bottom: 3px solid #d92323;
+}
+
+.entryInputInvalid {
+    color: #4c1010;
 }
 
 .addButton {
