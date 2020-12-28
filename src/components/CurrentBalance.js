@@ -16,7 +16,7 @@ function CurrentBalance() {
         if (api.account) {
             setValue('balance', api.account.balance)
         }
-    }, [api.account])
+    }, [api.account, setValue])
 
     const onSubmit = data => {
         const val = +data.balance

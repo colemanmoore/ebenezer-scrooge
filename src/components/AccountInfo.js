@@ -2,7 +2,7 @@ import React from 'react'
 
 const AccountInfo = ({ user, logout }) => (
     <div style={Container}>
-        {user.photoURL ? <img style={Image} src={user.photoURL} /> : null }
+        {user.photoURL ? <img alt="user photo" style={Image} src={user.photoURL} /> : null }
         <span>{user.displayName}</span>
         <span style={LogoutLink} onClick={logout}>Logout</span>
     </div>

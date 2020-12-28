@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Grid from './Grid/Grid'
 import GridRow from './Grid/GridRow'
-import { compareDates, renderDate } from '../util/util'
+import massage from '../util/entries'
 import { useApi } from '../hooks/useApi'
 
 function EntriesDisplay() {
@@ -11,31 +11,9 @@ function EntriesDisplay() {
     const [selectedIdx, setSelectedIdx] = useState(null)
     const [rows, setRows] = useState([])
 
-    const massage = data => {
-        const massaged = data.map(entry => ({
-            id: entry.id,
-            title: entry.title,
-            date: renderDate(entry.date),
-            money: entry.money,
-            income: entry.money >= 0,
-            debt: entry.money < 0
-        })).sort((a, b) => compareDates(a.date, b.date))
-
-        let rollingBalance = api.account.balance
-        const result = []
-        massaged.forEach(entry => {
-            rollingBalance += entry.money
-            result.push({
-                ...entry,
-                balance: rollingBalance
-            })
-        })
-        return result
-    }
-
     useEffect(() => {
         if (api.account) {
-            setRows(massage(api.entries))
+            setRows(massage(api.account, api.entries))
         }
     }, [api.account, api.entries])
 
