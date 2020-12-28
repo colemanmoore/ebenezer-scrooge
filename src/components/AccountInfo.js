@@ -1,10 +1,10 @@
 import React from 'react'
 
-const AccountInfo = ({ user }) => (
+const AccountInfo = ({ user, logout }) => (
     <div style={Container}>
         {user.photoURL ? <img style={Image} src={user.photoURL} /> : null }
-        <span style={Text}>{user.displayName}</span>
-        {/*<span style={Text}>{user.uid}</span>*/}
+        <span>{user.displayName}</span>
+        <span style={LogoutLink} onClick={logout}>Logout</span>
     </div>
 )
 
@@ -12,7 +12,8 @@ const Container = {
     position: 'absolute',
     textAlign: 'center',
     top: '10px',
-    right: '20px'
+    right: '20px',
+    fontFamily: 'Verdana'
 }
 
 const Image = {
@@ -21,8 +22,13 @@ const Image = {
     marginBottom: '-3px'
 }
 
-const Text = {
-    fontFamily: 'Verdana'
+const LogoutLink = {
+    display: 'block',
+    textAlign: 'right',
+    marginTop: '6px',
+    fontSize: '12px',
+    color: '#505050',
+    cursor: 'pointer'
 }
 
 export default AccountInfo

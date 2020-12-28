@@ -84,6 +84,7 @@ function useProvideAuth() {
     const logout = async () => {
         await authentication.signOut()
         setUser(false)
+        setAuthorized(false)
     }
 
     useEffect(() => {

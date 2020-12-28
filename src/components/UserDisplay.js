@@ -30,9 +30,13 @@ const UserDisplay = () => {
         }
     }, [api.account])
 
+    const logout = () => {
+        auth.logout()
+    }
+
     return (
         <div>
-            <AccountInfo user={auth.user} />
+            <AccountInfo user={auth.user} logout={logout} />
             <div style={{display:'flex', justifyContent: 'center', marginTop: '40px'}}>
                 <CurrentBalance />
                 <EntryForm />
