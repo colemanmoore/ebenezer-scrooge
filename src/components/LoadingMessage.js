@@ -3,7 +3,7 @@ import React from 'react'
 const LoadingMessage = () => (
     <div style={Container}>
         <div style={LoadingText}>
-            One moment...
+            $ one moment... $
         </div>
     </div>
 )
@@ -15,9 +15,9 @@ const Container = {
 }
 
 const LoadingText = {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    marginTop: '50px'
+    fontSize: '18px',
+    color: '#2a582a',
+    marginTop: '80px'
 }
 
 export default LoadingMessage

@@ -1,13 +1,9 @@
 import React from 'react'
+import styles from './LoginControl.module.css'
 
 const LoginControl = ({ doLogin }) => (
     <div
-        style={{
-            backgroundColor: '#eeedfe',
-            padding: '10px',
-            textAlign: 'center',
-            cursor: 'pointer'
-        }}
+        className={styles.container}
         onClick={doLogin}
     >
         with whom do I have the pleasure of speaking?

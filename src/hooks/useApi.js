@@ -18,8 +18,10 @@ function useProvideApi() {
 
     const [entries, setEntries] = useState([])
     const [account, setAccount] = useState(null)
+    const [fetching, setFetching] = useState(false)
 
     const getAccount = async () => {
+        setFetching(true)
         try {
             const res = await xhr.get(`/account`)
             setAccount({
@@ -28,15 +30,20 @@ function useProvideApi() {
             })
         } catch (error) {
             setAccount(null)
+        } finally {
+            setFetching(false)
         }
     }
 
     const updateAccount = async ({ balance }) => {
+        setFetching(true)
         const res = await xhr.put(`/account`, { balance })
         setAccount(res.data)
+        setFetching(false)
     }
 
     const refreshEntries = async () => {
+        setFetching(true)
         try {
             const res = await xhr.get('/entries', {
                 params: {
@@ -46,10 +53,13 @@ function useProvideApi() {
             setEntries(res.data.entries)
         } catch (error) {
             setEntries([])
+        } finally {
+            setFetching(false)
         }
     }
 
     const addEntry = async ({ date, title, money}) => {
+        setFetching(true)
         try {
             await xhr.post('/entries', { date, title, money })
         } catch (error) {
@@ -57,6 +67,7 @@ function useProvideApi() {
         }
 
         await refreshEntries({ userId: account.userId })
+        setFetching(false)
     }
 
     const deleteEntry = entryId => {
@@ -81,10 +92,8 @@ function useProvideApi() {
         addEntry,
         deleteEntry,
         entries,
-        account
+        account,
+        fetching,
+        setFetching
     }
-}
-
-export const sessionLogin = (idToken) => {
-    return xhr.post('/login', { idToken })
 }

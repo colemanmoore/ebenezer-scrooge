@@ -3,7 +3,7 @@ import { useAuth } from '../hooks/useAuth'
 import { ProvideApi } from '../hooks/useApi'
 import TopHeader from './TopHeader'
 import UserDisplay from './UserDisplay'
-import LoginControl from './LoginControl'
+import LoginControl from './LoginControl/LoginControl'
 
 function App() {
 

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import CurrentBalance from './CurrentBalance'
-import EntryForm from './EntryForm'
+import EntryForm from './EntryForm/EntryForm'
 import EntriesDisplay from './EntriesDisplay'
 import AccountInfo from './AccountInfo'
 import { useApi } from '../hooks/useApi'
 import { useAuth } from '../hooks/useAuth'
+import LoadingMessage from "./LoadingMessage";
 
 const UserDisplay = () => {
 
@@ -36,7 +37,7 @@ const UserDisplay = () => {
                 <CurrentBalance />
                 <EntryForm />
             </div>
-            <EntriesDisplay />
+            {api.fetching? <LoadingMessage /> : <EntriesDisplay /> }
         </div>
     )
 }

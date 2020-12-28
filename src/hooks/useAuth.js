@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import { sessionLogin } from './useApi'
+import xhr from '../util/xhr'
 
 const config = {
     apiKey: "AIzaSyCafxmJC1XIgE_txQifA6gC_hWpgVTv9T0",
@@ -35,6 +35,10 @@ export function ProvideAuth({ children }) {
     return <authContext.Provider value={auth}>{children}</authContext.Provider>
 }
 
+const sessionLogin = (idToken, csrfToken) => {
+    return xhr.post('/login', { idToken, csrfToken })
+}
+
 function useProvideAuth() {
 
     const [user, setUser] = useState(false)
@@ -63,7 +67,8 @@ function useProvideAuth() {
         }
 
         try {
-            await sessionLogin(idToken)
+            console.log('csrf', window.csrfToken)
+            await sessionLogin(idToken, window.csrfToken)
             setAuthorized(true)
         } catch (error) {
             console.log('Error setting session with service')
@@ -72,7 +77,6 @@ function useProvideAuth() {
         }
 
         user = { ...resp.user.providerData[0] }
-        console.log('session login done', user)
         setUser(user)
         return user
     }

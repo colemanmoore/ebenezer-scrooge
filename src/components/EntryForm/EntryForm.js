@@ -1,8 +1,8 @@
 import React from 'react'
 import classNames from 'classnames'
 import { useForm } from 'react-hook-form'
-import { useApi } from '../hooks/useApi'
-import { validateDate, validateMoney, createDate } from '../util/util'
+import { useApi } from '../../hooks/useApi'
+import { validateDate, validateMoney, createDate } from '../../util/util'
 import styles from './EntryForm.module.css'
 
 const EntryForm = () => {
