@@ -67,12 +67,10 @@ function useProvideAuth() {
         }
 
         try {
-            console.log('csrf', window.csrfToken)
             await sessionLogin(idToken, window.csrfToken)
             setAuthorized(true)
         } catch (error) {
-            console.log('Error setting session with service')
-            console.log(error)
+            console.log('Error setting session with service', error)
             return false
         }
 
