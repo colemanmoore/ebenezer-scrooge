@@ -6,7 +6,7 @@ const dateFormats = [
 ]
 
 export function validateMoney(money) {
-  if (!money) return false;
+  if (!money) return true;
 
   const val = parseFloat(money)
   return (typeof val === 'number' && !isNaN(val))

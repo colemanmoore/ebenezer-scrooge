@@ -10,6 +10,7 @@
 
 # production
 /build
+server/dist
 
 # misc
 .DS_Store
@@ -24,7 +25,5 @@ yarn-error.log*
 
 .eslintcache
 .idea
-build
-dist-server
 .env
-server/encode-firebase-service-key.js
+encode-firebase-service-key.js

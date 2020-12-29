@@ -18,7 +18,7 @@ const UserDisplay = () => {
         } catch (error) {
             console.log('error getting account:', error)
         }
-    }, [api])
+    }, [])
 
     useEffect(() => {
         if (api.account) {
@@ -28,7 +28,7 @@ const UserDisplay = () => {
                 console.log('error refreshing entries:', err)
             }
         }
-    }, [api, api.account])
+    }, [api.account])
 
     const logout = () => {
         auth.logout()

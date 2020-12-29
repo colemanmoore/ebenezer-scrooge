@@ -1,9 +1,8 @@
 import * as admin from 'firebase-admin'
 
-console.log('ahem', process.env.GOOGLE_CONFIG_BASE64)
 admin.initializeApp({
     credential: admin.credential.cert(
-        JSON.parse(Buffer.from(process.env.GOOGLE_CONFIG_BASE64, 'base64').toString('ascii'))
+        JSON.parse(Buffer.from(process.env.GCB64, 'base64').toString('ascii'))
     ),
     // credential: admin.credential.applicationDefault(),
     databaseURL: 'https://finfuture-31e00.firebaseio.com'

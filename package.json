@@ -10,50 +10,23 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.0",
-    "babel-node": "^0.0.1-security",
-    "body-parser": "^1.19.0",
     "classnames": "^2.2.6",
-    "cookie-parser": "^1.4.5",
-    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
     "firebase": "^8.2.1",
-    "firebase-admin": "^9.4.2",
     "moment": "^2.29.1",
-    "morgan": "^1.10.0",
-    "pg": "^8.5.1",
+    "npm-run-all": "^4.1.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hook-form": "^6.13.0",
     "react-scripts": "4.0.1",
-    "rimraf": "^3.0.2",
     "web-vitals": "^0.2.4"
-  },
-  "nodemonConfig": {
-    "exec": "npm run server:dev",
-    "watch": [
-      "server/*",
-      "public/*"
-    ],
-    "ignore": [
-      "**/__tests__/**",
-      "*.test.js",
-      "*.spec.js"
-    ]
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server:transpile": "babel ./server --out-dir dist-server",
-    "server:clean": "rimraf dist-server",
-    "server:build": "npm-run-all server:clean server:transpile",
-    "server:serve": "PORT=8080 node ./dist-server/bin/www",
-    "server:dev": "NODE_ENV=development npm-run-all server:build server:serve -- --require dotenv/config",
-    "server:watch": "nodemon",
-    "webapp:build": "npm run build",
-    "all": "npm-run-all webapp:build server:build server:serve"
+    "serve": "npm run build && (cd server && npm run prod)"
   },
   "eslintConfig": {
     "extends": [
@@ -72,10 +45,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.6",
-    "npm-run-all": "^4.1.5"
   },
   "babel": {
     "presets": [

@@ -6,7 +6,7 @@ import path from 'path'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import routes from './routes'
-import { initializeDatabase } from './datastore/index'
+import { initializeDatabase } from './datastore'
 
 const app = express()
 app.server = http.createServer(app)
@@ -33,8 +33,7 @@ app.use(cookieParser())
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'));
 
 // Serve static assets
-const staticFolder = path.resolve(__dirname, '..', 'build')
-app.set('views', staticFolder)
+const staticFolder = path.resolve(__dirname, '..', '..', 'build')
 app.use(express.static(staticFolder))
 
 app.get('/', (req, res) => {
@@ -43,7 +42,7 @@ app.get('/', (req, res) => {
 })
 
 // Set up DB
-initializeDatabase().then(() => console.log('~ database initialized ~'))
+initializeDatabase().then(() => console.log('~ database ready ~'))
 
 app.use('/api', routes())
 
