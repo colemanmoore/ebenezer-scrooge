@@ -33,7 +33,7 @@ app.use(cookieParser())
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'));
 
 // Serve static assets
-const staticFolder = path.resolve(__dirname, '..', '..', 'build')
+const staticFolder = path.resolve(__dirname, '..', 'build')
 app.use(express.static(staticFolder))
 
 app.get('/', (req, res) => {

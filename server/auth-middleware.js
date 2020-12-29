@@ -19,8 +19,11 @@ export const createSessionCookie = async (req, res, next) => {
     try {
         const sessionCookie = await admin.auth()
             .createSessionCookie(idToken, { expiresIn })
-        const options = { maxAge: expiresIn, httpOnly: true, secure: true }
-        res.cookie('session', sessionCookie, options)
+        res.cookie('session', sessionCookie, {
+            maxAge: expiresIn,
+            httpOnly: true,
+            secure: process.env.NODE_ENV==='production'
+        })
         res.end(JSON.stringify({ status: 'success' }))
     } catch (error) {
         console.log(error)
