@@ -18,7 +18,10 @@ user_id VARCHAR(36) DEFAULT NULL,
 balance INT DEFAULT 0
 );`
 
-const pool = new Pool({ connectionString })
+const pool = new Pool({
+    connectionString,
+    ssl: { rejectUnauthorized: false }
+})
 
 const executeQueryArray = async arr => new Promise(resolve => {
     const stop = arr.length
