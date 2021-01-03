@@ -14,7 +14,7 @@
     "server:dev": "NODE_ENV=development npm-run-all server:build server:serve",
     "server:prod": "NODE_ENV=production npm-run-all server:build server:serve",
     "server:watch": "nodemon",
-    "all:prod": "npm run build && npm run server:prod"
+    "heroku-postbuild": "run-p build && npm run server:build"
   },
   "babel": {
     "presets": [
