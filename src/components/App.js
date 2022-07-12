@@ -7,19 +7,19 @@ import LoginControl from './LoginControl/LoginControl'
 
 function App() {
 
-    const auth = useAuth()
+  const auth = useAuth()
 
-    return (
-        <div>
-            <TopHeader />
-            {auth.authorized ?
-                <ProvideApi>
-                    <UserDisplay />
-                </ProvideApi>
-                : <LoginControl doLogin={auth.login} />
-            }
-        </div>
-    )
+  return (
+    <div>
+      <TopHeader />
+      {auth.authorized ?
+        <ProvideApi>
+          <UserDisplay />
+        </ProvideApi>
+        : <LoginControl doLogin={auth.login} />
+      }
+    </div>
+  )
 }
 
 export default App

@@ -7,7 +7,7 @@ import { ProvideAuth } from './hooks/useAuth'
 ReactDOM.render(
   <React.StrictMode>
     <ProvideAuth>
-        <App />
+      <App />
     </ProvideAuth>
   </React.StrictMode>,
   document.getElementById('root')

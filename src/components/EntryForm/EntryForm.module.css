@@ -1,51 +1,51 @@
 .container {
-    margin-top: 16px;
-    margin-left: 40px;
+  margin-top: 16px;
+  margin-left: 40px;
 }
 
 .entryInput {
-    line-height: 2rem;
-    font-size: 1rem;
-    outline: none;
-    margin-right: 40px;
-    margin-bottom: 20px;
-    padding: 0 5px;
-    border-top: none;
-    border-right: none;
-    border-bottom: 2px solid #999999;
-    border-left: none;
-    transition: color 0.5s, border-bottom-color 0.5s;
+  line-height: 2rem;
+  font-size: 1rem;
+  outline: none;
+  margin-right: 40px;
+  margin-bottom: 20px;
+  padding: 0 5px;
+  border-top: none;
+  border-right: none;
+  border-bottom: 2px solid #999999;
+  border-left: none;
+  transition: color 0.5s, border-bottom-color 0.5s;
 }
 
 ::placeholder {
-    color: #99cca6;
+  color: #99cca6;
 }
 
 .entryInputInvalid::placeholder {
-    color: #d92323;
+  color: #d92323;
 }
 
 .entryInputInvalid {
-    color: #4c1010;
+  color: #4c1010;
 }
 
 .addButton {
-    font-weight: bold;
-    border-radius: 10px;
-    display: inline;
-    padding: 5px 10px;
-    border: 1px solid #aaaaaa;
-    transition: color 0.2s, background-color 0.2s;
+  font-weight: bold;
+  border-radius: 10px;
+  display: inline;
+  padding: 5px 10px;
+  border: 1px solid #aaaaaa;
+  transition: color 0.2s, background-color 0.2s;
 }
 
 .addButton.active {
-    cursor: pointer;
-    background-color: #e2f3e6;
-    color: #497;
-    border: none;
+  cursor: pointer;
+  background-color: #e2f3e6;
+  color: #497;
+  border: none;
 }
 
 .addButton.active:hover {
-    background-color: #497;
-    color: #e2f3e6;
+  background-color: #497;
+  color: #e2f3e6;
 }

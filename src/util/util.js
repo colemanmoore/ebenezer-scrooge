@@ -21,13 +21,13 @@ export function validateDate(date) {
   }
 
   return date.indexOf(d.format('M/D/YYYY')) >= 0
-      || date.indexOf(d.format('MM/DD/YYYY')) >= 0
-      || date.indexOf(d.format('M/D/YY')) >= 0
-      || date.indexOf(d.format('MM/DD/YY')) >= 0
-      || date.indexOf(d.format('MM/DD')) >=0
-      || date.indexOf(d.format('M/D')) >=0
-      || date.indexOf(d.format('MM/D')) >=0
-      || date.indexOf(d.format('M/DD')) >=0;
+    || date.indexOf(d.format('MM/DD/YYYY')) >= 0
+    || date.indexOf(d.format('M/D/YY')) >= 0
+    || date.indexOf(d.format('MM/DD/YY')) >= 0
+    || date.indexOf(d.format('MM/DD')) >=0
+    || date.indexOf(d.format('M/D')) >=0
+    || date.indexOf(d.format('MM/D')) >=0
+    || date.indexOf(d.format('M/DD')) >=0;
 }
 
 export function createDate(str) {

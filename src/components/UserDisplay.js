@@ -9,41 +9,41 @@ import LoadingMessage from "./LoadingMessage";
 
 const UserDisplay = () => {
 
-    const api = useApi()
-    const auth = useAuth()
+  const api = useApi()
+  const auth = useAuth()
 
-    useEffect(() => {
-        try {
-            api.getAccount()
-        } catch (error) {
-            console.log('error getting account:', error)
-        }
-    }, [])
-
-    useEffect(() => {
-        if (api.account) {
-            try {
-                api.refreshEntries()
-            } catch (err) {
-                console.log('error refreshing entries:', err)
-            }
-        }
-    }, [api.account])
-
-    const logout = () => {
-        auth.logout()
+  useEffect(() => {
+    try {
+      api.getAccount()
+    } catch (error) {
+      console.log('error getting account:', error)
     }
+  }, [])
 
-    return (
-        <div>
-            <AccountInfo user={auth.user} logout={logout} />
-            <div style={{display:'flex', justifyContent: 'center', marginTop: '40px'}}>
-                <CurrentBalance />
-                <EntryForm />
-            </div>
-            {api.fetching? <LoadingMessage /> : <EntriesDisplay /> }
-        </div>
-    )
+  useEffect(() => {
+    if (api.account) {
+      try {
+        api.refreshEntries()
+      } catch (err) {
+        console.log('error refreshing entries:', err)
+      }
+    }
+  }, [api.account])
+
+  const logout = () => {
+    auth.logout()
+  }
+
+  return (
+    <div>
+      <AccountInfo user={auth.user} logout={logout} />
+      <div style={{display:'flex', justifyContent: 'center', marginTop: '40px'}}>
+        <CurrentBalance />
+        <EntryForm />
+      </div>
+      {api.fetching? <LoadingMessage /> : <EntriesDisplay /> }
+    </div>
+  )
 }
 
 export default UserDisplay
