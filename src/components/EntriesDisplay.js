@@ -1,57 +1,52 @@
-import React, { useState, useEffect } from 'react'
-import Grid from './Grid/Grid'
-import GridRow from './Grid/GridRow'
-import massage from '../util/entries'
-import { useApi } from '../hooks/useApi'
+import React, {useState, useEffect} from 'react';
+import EntryRow from './EntryRow';
+import massage from '../util/entries';
+import {useApi} from '../hooks/useApi';
+import styled from 'styled-components';
 
 function EntriesDisplay() {
 
-  const api = useApi()
-
-  const [selectedIdx, setSelectedIdx] = useState(null)
-  const [rows, setRows] = useState([])
+  const api = useApi();
+  const [selectedIdx, setSelectedIdx] = useState(null);
+  const [rows, setRows] = useState([]);
 
   useEffect(() => {
     if (api.account) {
-      setRows(massage(api.account, api.entries))
+      setRows(massage(api.account, api.entries));
     }
-  }, [api.account, api.entries])
+  }, [api.account, api.entries]);
 
-  const clickRow = rowIdx => setSelectedIdx(rowIdx)
+  const clickRow = rowIdx => setSelectedIdx(rowIdx);
 
   const doubleClickRow = async rowId => {
-    await api.deleteEntry(rowId)
-    await api.refreshEntries()
-  }
+    await api.deleteEntry(rowId);
+    await api.refreshEntries();
+  };
 
-  const columns = [
-    {key: 'date', name: 'Date'},
-    {key: 'title', name: 'Title'},
-    {key: 'money', name: '+/-'},
-    {key: 'balance', name: 'Balance'}
-  ]
+  const keys = [
+    'date', 'title', 'money', 'balance',
+  ];
 
   return (
-    <div style={Container}>
-      <Grid>
-        {rows.map((row, idx) => {
-          return <GridRow
-            key={idx}
-            keys={columns.map(col => col.key)}
-            selected={selectedIdx===idx}
-            onClick={clickRow.bind(null, idx)}
-            onDoubleClick={doubleClickRow.bind(null, row.id)}
-            data={row}
-          />
-        })}
-      </Grid>
-    </div>
-  )
+    <Container>
+      {rows.map((row, idx) => {
+        return <EntryRow
+          key={idx}
+          keys={keys}
+          selected={selectedIdx === idx}
+          onClick={clickRow.bind(null, idx)}
+          onDoubleClick={doubleClickRow.bind(null, row.id)}
+          data={row}
+        />;
+      })}
+    </Container>
+  );
 }
 
-const Container = {
-  display: 'flex',
-  justifyContent: 'center'
-}
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+`;
 
-export default EntriesDisplay
+export default EntriesDisplay;

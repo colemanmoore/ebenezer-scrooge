@@ -1,25 +1,25 @@
-import React from 'react'
-import { useAuth } from '../hooks/useAuth'
-import { ProvideApi } from '../hooks/useApi'
-import TopHeader from './TopHeader'
-import UserDisplay from './UserDisplay'
-import LoginControl from './LoginControl/LoginControl'
+import React from 'react';
+import {useAuth} from '../hooks/useAuth';
+import {ProvideApi} from '../hooks/useApi';
+import TopHeader from './TopHeader';
+import UserDisplay from './UserDisplay';
+import LoginControl from './LoginControl';
 
 function App() {
 
-  const auth = useAuth()
+  const auth = useAuth();
 
   return (
-    <div>
-      <TopHeader />
+    <article>
+      <TopHeader/>
       {auth.authorized ?
         <ProvideApi>
-          <UserDisplay />
+          <UserDisplay/>
         </ProvideApi>
-        : <LoginControl doLogin={auth.login} />
+        : <LoginControl doLogin={auth.login}/>
       }
-    </div>
-  )
+    </article>
+  );
 }
 
-export default App
+export default App;

@@ -3,18 +3,19 @@ import moment from 'moment'
 const dateFormats = [
   'MM/DD/YYYY',
   'MM/DD'
-]
+];
+
+const integerRegExp = /^-?([0-9])+$/;
 
 export function validateMoney(money) {
-  if (!money) return true;
-
+  if (!integerRegExp.test(money)) {
+    return false;
+  }
   const val = parseFloat(money)
   return (typeof val === 'number' && !isNaN(val))
 }
 
 export function validateDate(date) {
-  if (!date) return false;
-
   let d = moment(date, dateFormats)
   if (d === null || !d.isValid()) {
     return false

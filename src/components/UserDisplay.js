@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import CurrentBalance from './CurrentBalance'
-import EntryForm from './EntryForm/EntryForm'
+import EntryForm from './EntryForm'
 import EntriesDisplay from './EntriesDisplay'
 import AccountInfo from './AccountInfo'
 import { useApi } from '../hooks/useApi'
 import { useAuth } from '../hooks/useAuth'
 import LoadingMessage from "./LoadingMessage";
+import styled from 'styled-components';
 
 const UserDisplay = () => {
 
@@ -30,20 +31,31 @@ const UserDisplay = () => {
     }
   }, [api.account])
 
-  const logout = () => {
-    auth.logout()
-  }
-
   return (
-    <div>
-      <AccountInfo user={auth.user} logout={logout} />
-      <div style={{display:'flex', justifyContent: 'center', marginTop: '40px'}}>
+    <Container>
+      <AccountInfo user={auth.user} logout={auth.logout} />
+      <FormArea>
         <CurrentBalance />
         <EntryForm />
-      </div>
+      </FormArea>
       {api.fetching? <LoadingMessage /> : <EntriesDisplay /> }
-    </div>
+    </Container>
   )
 }
+
+const Container = styled.section`
+  @media screen and (min-width: 600px) {
+    padding: 0 100px;
+  }
+  @media screen and (min-width: 900px) {
+    padding: 0 200px;
+  }
+`;
+
+const FormArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
 
 export default UserDisplay

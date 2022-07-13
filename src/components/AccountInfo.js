@@ -1,20 +1,23 @@
 import React from 'react'
+import styled from 'styled-components';
 
 const AccountInfo = ({ user, logout }) => (
-  <div style={Container}>
-    {user.photoURL ? <img alt="user photo" style={Image} src={user.photoURL} /> : null }
+  <Container>
+    {user.photoURL
+      ? <img alt="user photo" style={Image} src={user.photoURL} />
+      : null
+    }
     <span>{user.displayName}</span>
-    <span style={LogoutLink} onClick={logout}>Logout</span>
-  </div>
+    <LogoutLink onClick={logout}>Logout</LogoutLink>
+  </Container>
 )
 
-const Container = {
-  position: 'absolute',
-  textAlign: 'center',
-  top: '10px',
-  right: '20px',
-  fontFamily: 'Verdana'
-}
+const Container = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+`
 
 const Image = {
   height: '1.2em',
@@ -22,13 +25,13 @@ const Image = {
   marginBottom: '-3px'
 }
 
-const LogoutLink = {
-  display: 'block',
-  textAlign: 'right',
-  marginTop: '6px',
-  fontSize: '12px',
-  color: '#505050',
-  cursor: 'pointer'
-}
+const LogoutLink = styled.span`
+  display: block;
+  text-align: right;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--grayDark);
+  cursor: pointer;
+`
 
 export default AccountInfo
