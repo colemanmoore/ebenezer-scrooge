@@ -1,9 +1,10 @@
 import React from 'react'
+import {LOADING_MSG} from '../constants';
 
 const LoadingMessage = () => (
   <div style={Container}>
     <div style={LoadingText}>
-      $ one moment... $
+      {LOADING_MSG}
     </div>
   </div>
 )

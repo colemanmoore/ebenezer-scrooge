@@ -7,7 +7,7 @@ import Plus from './Plus';
 
 const EntryForm = () => {
 
-  const api = useApi();
+  const {addEntry} = useApi();
 
   const {
     register,
@@ -25,7 +25,7 @@ const EntryForm = () => {
     const money = parseInt(data.money);
 
     if (date && title && money) {
-      api.addEntry({date, title, money}).then(() => {
+      addEntry({date, title, money}).then(() => {
         reset();
       }).catch(() => {
         console.log('Error adding entry');

@@ -7,16 +7,16 @@ import LoginControl from './LoginControl';
 
 function App() {
 
-  const auth = useAuth();
+  const {authorized, login} = useAuth();
 
   return (
     <article>
       <TopHeader/>
-      {auth.authorized ?
+      {authorized ?
         <ProvideApi>
           <UserDisplay/>
         </ProvideApi>
-        : <LoginControl doLogin={auth.login}/>
+        : <LoginControl doLogin={login}/>
       }
     </article>
   );

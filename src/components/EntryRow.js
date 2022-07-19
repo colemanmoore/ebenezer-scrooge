@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
-const MONEY_KEY = 'money';
-const BALANCE_KEY = 'balance';
+import {MONEY_KEY, BALANCE_KEY} from '../constants';
 
 const EntryRow = ({keys, data, selected, onClick, onDoubleClick}) => {
   return (
@@ -33,7 +31,7 @@ const Container = styled.div`
 const Cell = styled.div`
   flex: 1;
   padding: 5px;
-  ${props => (props.debt || props.negative) ? 'color: var(--redColor);' : ''}
+  ${props => (props.debt || props.negative) ? 'color: var(--redBright);' : ''}
   ${props => props.balance ? 'font-weight: bold;' : ''}
   cursor: pointer;
   &:not(:first-child) {

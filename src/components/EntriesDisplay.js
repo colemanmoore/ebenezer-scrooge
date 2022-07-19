@@ -1,44 +1,46 @@
 import React, {useState, useEffect} from 'react';
-import EntryRow from './EntryRow';
-import massage from '../util/entries';
-import {useApi} from '../hooks/useApi';
 import styled from 'styled-components';
+import EntryRow from './EntryRow';
+import {massage} from '../util/entries';
+import {ENTRY_KEYS} from '../constants';
+import {useApi} from '../hooks/useApi';
 
 function EntriesDisplay() {
 
-  const api = useApi();
+  const {refreshEntries, entries, balance, deleteEntry} = useApi();
   const [selectedIdx, setSelectedIdx] = useState(null);
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    if (api.account) {
-      setRows(massage(api.account, api.entries));
+    if (!entries || !entries.length) {
+      refreshEntries().catch(error => {
+        console.error('Error fetching entries', error);
+      });
+    } else if (entries?.length && !!balance) {
+      setRows(massage(balance, entries));
     }
-  }, [api.account, api.entries]);
+  }, [balance, entries, refreshEntries]);
 
   const clickRow = rowIdx => setSelectedIdx(rowIdx);
 
   const doubleClickRow = async rowId => {
-    await api.deleteEntry(rowId);
-    await api.refreshEntries();
+    await deleteEntry(rowId);
+    refreshEntries();
   };
 
-  const keys = [
-    'date', 'title', 'money', 'balance',
-  ];
-
+  console.log(rows);
   return (
     <Container>
-      {rows.map((row, idx) => {
-        return <EntryRow
-          key={idx}
-          keys={keys}
+      {rows.map((row, idx) => (
+        <EntryRow
+          key={row.id}
+          keys={ENTRY_KEYS}
+          data={row}
           selected={selectedIdx === idx}
           onClick={clickRow.bind(null, idx)}
           onDoubleClick={doubleClickRow.bind(null, row.id)}
-          data={row}
-        />;
-      })}
+        />
+      ))}
     </Container>
   );
 }

@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import {LOGIN_PROMPT} from '../constants';
 
 const LoginControl = ({doLogin}) => (
   <Container onClick={doLogin}>
-    with whom do I have the pleasure of speaking?
+    {LOGIN_PROMPT}
   </Container>
 );
 

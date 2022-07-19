@@ -41,7 +41,7 @@ const sessionLogin = (idToken, csrfToken) => {
 
 function useProvideAuth() {
 
-  const [user, setUser] = useState(false)
+  const [user, setUser] = useState(null)
   const [authorized, setAuthorized] = useState(false)
 
   const login = async () => {

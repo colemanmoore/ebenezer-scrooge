@@ -1,47 +1,31 @@
-import React, { useEffect } from 'react'
-import CurrentBalance from './CurrentBalance'
-import EntryForm from './EntryForm'
-import EntriesDisplay from './EntriesDisplay'
-import AccountInfo from './AccountInfo'
-import { useApi } from '../hooks/useApi'
-import { useAuth } from '../hooks/useAuth'
-import LoadingMessage from "./LoadingMessage";
+import React, {useEffect} from 'react';
+import CurrentBalance from './CurrentBalance';
+import EntryForm from './EntryForm';
+import EntriesDisplay from './EntriesDisplay';
+import AccountInfo from './AccountInfo';
+import LoadingMessage from './LoadingMessage';
 import styled from 'styled-components';
+import {useApi} from '../hooks/useApi';
 
 const UserDisplay = () => {
 
-  const api = useApi()
-  const auth = useAuth()
+  const {getAccount, fetching} = useApi();
 
   useEffect(() => {
-    try {
-      api.getAccount()
-    } catch (error) {
-      console.log('error getting account:', error)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (api.account) {
-      try {
-        api.refreshEntries()
-      } catch (err) {
-        console.log('error refreshing entries:', err)
-      }
-    }
-  }, [api.account])
+    getAccount();
+  }, []);
 
   return (
     <Container>
-      <AccountInfo user={auth.user} logout={auth.logout} />
+      <AccountInfo/>
       <FormArea>
-        <CurrentBalance />
-        <EntryForm />
+        <CurrentBalance/>
+        <EntryForm/>
       </FormArea>
-      {api.fetching? <LoadingMessage /> : <EntriesDisplay /> }
+      {fetching? <LoadingMessage /> : <EntriesDisplay /> }
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.section`
   @media screen and (min-width: 600px) {
@@ -58,4 +42,4 @@ const FormArea = styled.div`
   justify-content: center;
 `;
 
-export default UserDisplay
+export default UserDisplay;

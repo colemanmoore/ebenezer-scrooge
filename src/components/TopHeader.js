@@ -1,4 +1,5 @@
 import React from 'react'
+import {TITLE} from '../constants';
 
 const TopHeader = () => (
   <div style={{
@@ -9,7 +10,7 @@ const TopHeader = () => (
     marginTop: '2.2em',
     marginBottom: '1em'
   }}>
-    MONEY
+    {TITLE}
   </div>
 )
 

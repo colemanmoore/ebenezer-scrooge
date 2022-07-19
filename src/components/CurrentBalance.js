@@ -1,42 +1,39 @@
 import React, {useEffect} from 'react';
 import {useForm} from 'react-hook-form';
-import {useApi} from '../hooks/useApi';
 import styled from 'styled-components';
+import {BALANCE_LABEL} from '../constants';
+import {useApi} from '../hooks/useApi';
 
 function CurrentBalance() {
 
-  const api = useApi();
-
-  const {register, handleSubmit, setValue, reset} = useForm({
-    defaultValues: {
-      balance: api.account ? api.account.balance : null,
-    },
+  const {balance, updateAccount} = useApi();
+  const {register, handleSubmit, reset, setValue} = useForm();
+  const balanceInput = register('balance', {
+    defaultValues: {balance: balance}
   });
 
   useEffect(() => {
-    if (api.account) {
-      setValue('balance', api.account.balance);
-    }
-  }, [api.account, setValue]);
+    setValue('balance', balance);
+  }, [balance])
 
   const onSubmit = data => {
+    console.log('submit', data)
     const val = +data.balance;
     if (isNaN(val)) {
       reset();
     } else {
-      api.updateAccount({balance: val});
+      updateAccount({balance: val});
     }
   };
 
   return (
     <Container>
-      <Label>balance?</Label>
-      <form style={{display: 'inline'}} onSubmit={handleSubmit(onSubmit)}>
+      <Label>{BALANCE_LABEL}</Label>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Input
-          name="balance"
-          ref={register()}
+          {...balanceInput}
           size={12}
-          type="text"
+          type='text'
         />
       </form>
     </Container>
@@ -44,8 +41,10 @@ function CurrentBalance() {
 }
 
 const Container = styled.div`
-  padding: 10px;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Label = styled.h2`
